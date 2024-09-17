@@ -16,8 +16,9 @@
 
   <body>
 
-    <canvas id="canvasOne" width="400" height="300" ></canvas>
-
+    
+    <canvas id="canvasOne" width="800" height="700" ></canvas>
+    
 
     <script type="text/javascript">
     // Gets a handle to the element with id canvasOne.
@@ -25,13 +26,16 @@
 		// Set the canvas up for drawing in 2D.
         const ctx = canvas.getContext("2d");
 
+        //writing my name in the canvas 
+        ctx.font = "50px Arial";
+        ctx.fillText("Jennifer ",10,80);
         //enlarging the canvas 
 
 		
 		// Set the fill colour to bright red.
-		
+		ctx.fillStyle = "rgb(255, 0, 0)";
 		// Create a filled rectangle 
-        //ctx.fillRect(10,10,10,150,100);
+        ctx.fillRect(100,100,100,150,100);
 	
 
 
