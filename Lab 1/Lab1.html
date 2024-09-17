@@ -42,7 +42,7 @@
         ctx.fillRect(100,100,300,200,300);
         //first 2 numbers are the positioning and the last three are the dimensions 
 
-        //to create another triangle vchange the coloyur first 
+        //to create another rectangle vchange the coloyur first 
         //to make it transparent add and a and aother variable at the end
         ctx.fillStyle = "rgba(0, 0, 255, 0.4)";
         ctx.fillRect(200,200,300,200,300);
@@ -67,10 +67,16 @@
         ctx.strokeStyle = "red";
         ctx.stroke();
 
+        //draw a semi circle 
+        ctx.beginPath();
+        ctx.arc(550, 550, 70, 0, 1 * Math.PI);
+        //making the circle orange 
+        ctx.fillStyle = "purple";
+        ctx.fill();
+        //width/height/radius/centre point
+        ctx.strokeStyle = "black";
+        ctx.stroke();
 
-
-	
-    
 		
     </script>
 
