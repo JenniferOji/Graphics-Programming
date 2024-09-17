@@ -47,14 +47,26 @@
         ctx.fillStyle = "rgba(0, 0, 255, 0.4)";
         ctx.fillRect(200,200,300,200,300);
        
+        //creating two circles of two different colours 
+        ctx.beginPath();
+        ctx.arc(150, 550, 70, 0, 2 * Math.PI);
+        //making the circle orange 
+        ctx.fillStyle = "orange";
+        ctx.fill();
+        //width/height/radius/centre point
+        ctx.stroke();
 
-
-       // ctx.fillRect(100, 100, 100, 100);
+        //creating two circles of two different colours 
+        ctx.beginPath();
+        ctx.arc(350, 550, 70, 0, 2 * Math.PI);
+        //making the circle orange 
+        ctx.fillStyle = "green";
+        ctx.fill();
+        //width/height/radius/centre point
+        ctx.stroke();
 
 
 	
-
-
     
 		
     </script>
