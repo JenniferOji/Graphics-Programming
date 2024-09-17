@@ -49,7 +49,7 @@
        
         //creating two circles of two different colours 
         ctx.beginPath();
-        ctx.arc(150, 550, 70, 0, 2 * Math.PI);
+        ctx.arc(100, 550, 70, 0, 2 * Math.PI);
         //making the circle orange 
         ctx.strokeStyle = "purple";
         ctx.fillStyle = "orange";
@@ -59,7 +59,7 @@
 
         //creating two circles of two different colours 
         ctx.beginPath();
-        ctx.arc(350, 550, 70, 0, 2 * Math.PI);
+        ctx.arc(270, 550, 70, 0, 2 * Math.PI);
         //making the circle orange 
         ctx.fillStyle = "green";
         ctx.fill();
@@ -69,13 +69,36 @@
 
         //draw a semi circle 
         ctx.beginPath();
-        ctx.arc(550, 550, 70, 0, 1 * Math.PI);
+        ctx.arc(450, 550, 70, 0, 1 * Math.PI);
         //making the circle orange 
         ctx.fillStyle = "purple";
         ctx.fill();
         //width/height/radius/centre point
         ctx.strokeStyle = "black";
         ctx.stroke();
+
+        //draw 3/4 of a circle 
+        ctx.beginPath();
+        ctx.arc(630, 550, 70, 0, 1.5 * Math.PI);
+        ctx.lineTo(630,550);
+        //making the circle orange 
+        ctx.fillStyle = "blue";
+        ctx.fill();
+        //width/height/radius/centre point
+        ctx.strokeStyle = "green";
+        ctx.stroke();
+        ctx.closepath();
+
+        //draw a semi circle 
+       // ctx.beginPath();
+       // ctx.arc(700, 550, 70, 0, 1.5 * Math.PI);
+        //making the circle orange 
+       // ctx.fillStyle = "purple";
+       // ctx.fill();
+        //width/height/radius/centre point
+    // ctx.strokeStyle = "black";
+       // ctx.lineTo(550,700)
+       // ctx.stroke();
 
 		
     </script>
