@@ -18,13 +18,19 @@
 
     
     <canvas id="canvasOne" width="800" height="700" ></canvas>
+    <canvas id="canvasTwo" width="350" height="500" ></canvas>
+
     
 
     <script type="text/javascript">
     // Gets a handle to the element with id canvasOne.
 		const canvas = document.getElementById("canvasOne");
+    const canvas2 = document.getElementById("canvasTwo");
+
 		// Set the canvas up for drawing in 2D.
         const ctx = canvas.getContext("2d");
+        const ctx2 = canvas2.getContext("2d");
+
 
         //writing my name in the canvas 
         ctx.font = "50px Arial";
@@ -87,21 +93,60 @@
         //width/height/radius/centre point
         ctx.strokeStyle = "green";
         ctx.stroke();
-        ctx.closepath();
+       // ctx.closepath();
 
-        //draw a semi circle 
-       // ctx.beginPath();
-       // ctx.arc(700, 550, 70, 0, 1.5 * Math.PI);
-        //making the circle orange 
-       // ctx.fillStyle = "purple";
-       // ctx.fill();
-        //width/height/radius/centre point
-    // ctx.strokeStyle = "black";
-       // ctx.lineTo(550,700)
-       // ctx.stroke();
+      //ADVANCED LAB 
+      //creating the first section of the pitch
+      ctx2.rect(60,70,225,180); //(x,y width , height)
+      ctx2.stroke();
+      //creating the second section of the pitch
+      ctx2.rect(60,250,225,180); //(x,y width , height)
+      ctx2.stroke();
 
-		
-    </script>
+      //finding the centre of the rectangle
+      const centrePoint = ((225/2) + 60);
+      ctx2.beginPath();
+      ctx2.arc(centrePoint,250,30,0,2 * Math.PI);
+      
+      //creating the two goals posts 
+      ctx2.rect(121,70,103,54);
+      ctx2.stroke();
+
+      //second post 
+      //360 + 70 = 130
+      ctx2.rect(121,430,103,-54);
+      ctx2.stroke();
+   
+      //SMALLEST RECTANGLES 
+      //on top 
+      //225 - 24/2
+      //100.5 + 60 to account for padding 
+      ctx2.rect(160.5,70,24,-10);
+
+       //on bottom
+      //225 - 24  / 2
+      //225 - 132 = 93
+      //93 + 60 = 142.5 to account for padding 
+      ctx2.rect(160.5,430,24,10);
+      ctx2.stroke();
+
+      //Second SMALLEST RECTANGLES 
+      //on top
+      //18 * 2 + 24 = 60
+      //225 - 132 = 93
+      //93 + 60 = 142.5  to account for padding 
+      ctx2.rect(142.5,70,60,18);
+      ctx2.stroke();
+
+
+      //on bottom
+      //18 * 2 + 24 = 60
+      //225 - 132 = 93
+      //93 + 60 = 142.5  to account for padding 
+      ctx2.rect(142.5,430,60,-18);
+      ctx2.stroke();
+   
+   </script>
 
   </body>
 
