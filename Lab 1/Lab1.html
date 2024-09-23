@@ -73,13 +73,13 @@
         ctx.strokeStyle = "red";
         ctx.stroke();
 
-        //draw a semi circle 
+        // Draw a semi-circle
         ctx.beginPath();
-        ctx.arc(450, 550, 70, 0, 1 * Math.PI);
-        //making the circle orange 
+        ctx.arc(450, 550, 70, 0, 1 * Math.PI); // Drawing the semi-circle (bottom half)
+        ctx.lineTo(380, 550); // Move from one end of the semi-circle to the other
+        ctx.closePath(); //connects the line between the last point and the starting point //450 - 70
         ctx.fillStyle = "purple";
         ctx.fill();
-        //width/height/radius/centre point
         ctx.strokeStyle = "black";
         ctx.stroke();
 
@@ -87,6 +87,7 @@
         ctx.beginPath();
         ctx.arc(630, 550, 70, 0, 1.5 * Math.PI);
         ctx.lineTo(630,550);
+        ctx.closePath();
         //making the circle orange 
         ctx.fillStyle = "blue";
         ctx.fill();
@@ -170,6 +171,14 @@
       ctx2.strokeStyle = "black";
       ctx2.stroke();
    
+       //CREATING THE RECTANGLE ON THE LEFT 
+      //bottom rectangle 
+      //70 + 180 - 40 = 210
+      //60 + 10 = 70
+      ctx2.rect(70,210,15,-40);
+      ctx2.stroke();
+      ctx2.strokeStyle = "black";
+      ctx2.stroke();
    </script>
 
   </body>
