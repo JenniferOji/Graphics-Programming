@@ -192,7 +192,21 @@
       ctx2.stroke();
       ctx2.strokeStyle = "black";
       ctx2.stroke();
-      ctx2.closePath();
+
+
+       // Draw a semi-circle
+      //finding the centre of the rectangle
+      const centrePoint2 = ((225/2) + 60);
+      ctx2.beginPath();
+      ctx2.arc(centrePoint2,106,30,0,1 * Math.PI);
+      ctx2.stroke();
+
+       //finding the centre of the rectangle
+       const centrePoint3 = ((225/2) + 60);
+      ctx2.beginPath();
+      ctx2.arc(centrePoint3,394,30,0,1 * Math.PI, true);
+      //setting it to true makes it go anti clockwise 
+      ctx2.stroke();
 
    </script>
 
