@@ -43,16 +43,29 @@
 
 
         //changed it to blue 
-		//ctx.fillStyle = "rgb(0, 0, 255)";
-		// Create a filled rectangle 
-        ctx.fillRect(100,100,300,200,300);
+        //ctx.fillStyle = "rgb(0, 0, 255)";
+        // Create a filled rectangle 
+        ctx.fillRect(100,100,300,200);
         //first 2 numbers are the positioning and the last three are the dimensions 
-
+        //setting the border colour to black
+        ctx.strokeStyle = "black";
+        //setting the line width for the border
+        ctx.lineWidth = 4; 
+        //drawing the rectangles border with the stroke 
+        ctx.strokeRect(100, 100, 300, 200);
+                
+        
         //to create another rectangle vchange the coloyur first 
         //to make it transparent add and a and aother variable at the end
+
         ctx.fillStyle = "rgba(0, 0, 255, 0.4)";
-        ctx.fillRect(200,200,300,200,300);
-       
+        ctx.fillRect(200,200,300,200);
+        //setting the line width for the border
+        ctx.strokeStyle = "green";
+        ctx.lineWidth = 4; 
+        //drawing the rectangles border with the stroke 
+        ctx.strokeRect(200, 200, 300, 200);
+                
         //creating two circles of two different colours 
         ctx.beginPath();
         ctx.arc(100, 550, 70, 0, 2 * Math.PI);
