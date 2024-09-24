@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+
+    <h1>Jennifer </h1>
+    <style type="text/css">
+        canvas{
+            border: black 10px solid;
+        }
+      body {
+          background-color: white;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <canvas id="canvas-for-ball" width="500" height="400"></canvas>
+
+    <script type="text/javascript">
+
+       
+      // Gets a handle to the element with id canvasOne.
+      var canvas = document.getElementById("canvas-for-ball");
+      // Get a 2D context for the canvas.
+      var ctx = canvas.getContext("2d");
+      
+      class Ball {
+        constructor(xposition,yposition,yvelocity,xvelocity,radius)
+        {
+            this.yposition = yposition;
+            this.xposition = xposition;
+            this.yvelocity = yvelocity;
+            this.xvelocity = xvelocity;
+            this.radius = radius;
+        }
+
+
+        draw(){
+            ctx.beginPath();
+            ctx.arc(this.xposition, this.yposition, 10, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
+        move(){
+            this.yposition += this.yvelocity;
+            this.xposition += this.xvelocity;
+        
+            if (this.yposition >= 390 )
+            {
+                this.yvelocity = this.yvelocity* -1;
+            }
+            //when the ball goes above the canvas it stops 
+            else if (this.yposition <= 0 )
+            {
+                this.yvelocity = this.yvelocity* -1;
+            }
+            //for the x position 
+            if (this.xposition >= 450)
+            {
+                this.xvelocity = this.xvelocity* -1;
+            }
+            if (this.xposition <= 0 )
+            {
+                this.xvelocity = this.xvelocity* -1;
+            }
+
+            }
+       }
+
+       myBall = new Ball(5,10,5,5,10);
+
+
+
+      // A function to repeat every time the animation loops.
+      function repeatme() {
+        ctx.clearRect(0,0,500,400);
+        //have the clear the rectangle at the start of the animation
+        myBall.draw();
+        myBall.move();
+       
+        window.requestAnimationFrame(repeatme);
+      }
+      
+      // Get the animation going.
+      repeatme();
+    </script>
+
+  </body>
+
+</html>
