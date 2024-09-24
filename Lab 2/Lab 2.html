@@ -34,25 +34,66 @@
       class Ball {
         constructor(xposition,yposition,yvelocity,xvelocity,radius)
         {
+            var rotation;
             this.yposition = yposition;
             this.xposition = xposition;
             this.yvelocity = yvelocity;
             this.xvelocity = xvelocity;
             this.radius = radius;
+            this.rotation = 0;
+
         }
 
 
         draw(){
             ctx.beginPath();
-            ctx.arc(this.xposition, this.yposition, 10, 0, 2 * Math.PI);
+            ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
             ctx.stroke();
+
+            //creating the rotaion on the ball 
+            this.rotation = this.rotation + 0.05;
+
+
+            //creating the peace sign on the ball 
+            //creating the line on the right 
+            //radius * cos angle
+            //radius * sin angle 
+            var x1 = (20 * Math.cos((Math.PI/4) + this.rotation)) + this.xposition;
+            var y1 = (20 * Math.sin((Math.PI/4) + this.rotation)) + this.yposition;
+            ctx.moveTo(this.xposition,this.yposition);
+            ctx.lineTo(x1,y1);
+            ctx.stroke();
+
+            //creating the line on the left 
+            var x2 = (20 * Math.cos((3*Math.PI/4) + this.rotation)) + this.xposition;
+            var y2 = (20 * Math.sin((3*Math.PI/4) + this.rotation)) + this.yposition;
+            ctx.moveTo(this.xposition,this.yposition);
+            ctx.lineTo(x2,y2);
+            ctx.stroke();
+
+            //creating the top centre line
+            var x3 = (20 * Math.cos((6*Math.PI/4) + this.rotation)) + this.xposition;
+            var y3 = (20 * Math.sin((6*Math.PI/4) + this.rotation))+ this.yposition;
+            ctx.moveTo(this.xposition,this.yposition);
+            ctx.lineTo(x3,y3);
+            ctx.stroke();
+
+            //creating the bottom centre line
+            var x4 = (20 * Math.cos((Math.PI/2) + this.rotation)) + this.xposition;
+            var y4 = (20 * Math.sin((Math.PI/2) + this.rotation))+ this.yposition;
+            ctx.moveTo(this.xposition,this.yposition);
+            ctx.lineTo(x4,y4);
+            ctx.stroke();
+
+            
+
         }
 
         move(){
             this.yposition += this.yvelocity;
             this.xposition += this.xvelocity;
         
-            if (this.yposition >= 390 )
+            if (this.yposition >= 380 )
             {
                 this.yvelocity = this.yvelocity* -1;
             }
@@ -62,7 +103,7 @@
                 this.yvelocity = this.yvelocity* -1;
             }
             //for the x position 
-            if (this.xposition >= 450)
+            if (this.xposition >= 480)
             {
                 this.xvelocity = this.xvelocity* -1;
             }
@@ -74,7 +115,8 @@
             }
        }
 
-       myBall = new Ball(5,10,5,5,10);
+       //created the ball object 
+       myBall = new Ball(20,20,3,3,20);
 
 
 
