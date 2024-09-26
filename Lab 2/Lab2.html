@@ -34,6 +34,7 @@
         constructor(xposition,yposition,yvelocity,xvelocity,radius)
         {
             var rotation;
+            //the parameters of the ball class 
             this.yposition = yposition;
             this.xposition = xposition;
             this.yvelocity = yvelocity;
@@ -44,8 +45,10 @@
         }
 
 
+        //the draw method to create what the ball looks like 
         draw(){
             ctx.beginPath();
+            //passing the parameters of the ball class 
             ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
             ctx.stroke();
 
@@ -87,10 +90,14 @@
 
         }
 
+        //the method to make the ball move 
         move(){
+            //adding to the positioning with every frame 
             this.yposition += this.yvelocity;
             this.xposition += this.xvelocity;
         
+            //reversing the ball if it reaching the end of the canvas 
+            //400-20 -> the radius of the ball
             if (this.yposition >= 380 )
             {
                 this.yvelocity = this.yvelocity* -1;
@@ -101,6 +108,7 @@
                 this.yvelocity = this.yvelocity* -1;
             }
             //for the x position 
+            //reversing the ball if it reaches the side of the canvas 
             if (this.xposition >= 480)
             {
                 this.xvelocity = this.xvelocity* -1;
@@ -114,6 +122,7 @@
        }
 
        //created the ball object 
+       //the parameters of the ball object that will be passed to the draw method 
        myBall = new Ball(20,20,3,3,20);
 
 
@@ -122,6 +131,8 @@
       function repeatme() {
         ctx.clearRect(0,0,500,400);
         //have the clear the rectangle at the start of the animation
+       
+        //calling the methods 
         myBall.draw();
         myBall.move();
        
