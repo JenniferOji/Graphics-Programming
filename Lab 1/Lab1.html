@@ -18,7 +18,7 @@
 
     
     <canvas id="canvasOne" width="800" height="700" ></canvas>
-    <canvas id="canvasTwo" width="350" height="500" ></canvas>
+    <canvas id="canvasTwo" width="350" height="600" ></canvas>
 
     
 
@@ -206,6 +206,20 @@
       ctx2.beginPath();
       ctx2.arc(centrePoint3,394,30,0,1 * Math.PI, true);
       //setting it to true makes it go anti clockwise 
+      ctx2.stroke();
+      //ctx2.closepath();
+
+      const centrePoint4 = ((225/2) + 60);
+      ctx2.beginPath();
+      ctx2.arc(centrePoint4,520,30,0,2 * Math.PI);
+      //setting it to true makes it go anti clockwise 
+      ctx2.stroke();
+      //from the end of the canvas to the left edge of the circle 
+      //ctx2.lineTo(143,520);
+      var point1 = 30 * Math.cos(Math.PI/4) + 160;
+      var point2 = 30 * Math.sin(Math.PI/4) + 520;
+      ctx2.lineTo(point1,point2);
+
       ctx2.stroke();
       ctx2.closepath();
 
