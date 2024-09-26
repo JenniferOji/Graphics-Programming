@@ -52,7 +52,17 @@
             //creating the rotaion on the ball 
             this.rotation = this.rotation + 0.05;
 
-            
+            //creating the peace sign on the ball 
+            //creating the line on the right 
+            //radius * cos angle
+            //radius * sin angle 
+            var x1 = (20 * Math.cos((Math.PI/4) + this.rotation)) + this.xposition;
+            var y1 = (20 * Math.sin((Math.PI/4) + this.rotation)) + this.yposition;
+            ctx.moveTo(this.xposition,this.yposition);
+            ctx.lineTo(x1,y1);
+            ctx.stroke();
+
+           
 
         }
 
