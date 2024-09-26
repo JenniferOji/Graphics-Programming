@@ -24,15 +24,61 @@
 
     <script type="text/javascript">
       
+      class Ball {
+        constructor(yposition,xposition,yvelocity,xvelocity,radius)
+        {
+            this.yposition = yposition;
+            this.xposition = xposition;
+            this.yvelocity = yvelocity;
+            this.xvelocity = xvelocity;
+            this.radius = radius;
+        }
+       }
+
       // Gets a handle to the element with id canvasOne.
       var canvas = document.getElementById("canvas-for-ball");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
       
-    
+      // The vertical location of the ball.
+      var yposition = 10;
+      var yvelocity = 5;
+      //the horizontal position of the ball 
+      var xposition = 5;
+      var xvelocity = 5;
+      // A function to repeat every time the animation loops.
+      function repeatme() {
         ctx.clearRect(0,0,500,400);
-       
+        //have the clear the rectangle at the start of the animation
+
+        // Draw the ball (stroked, not filled).
+        ctx.beginPath();
+        ctx.arc(200, yposition, 10, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        
+       // myBall = new Ball(10,1,1,1,1,)
+        // Update the y location.
+        yposition += yvelocity;
+       // xposition += xvelocity;
+
+        //stopping the ball when it gets to the bottom of the canvas 
+        //500 - 10 : the radius of the ball
+        if (yposition >= 390 )
+        {
+            yvelocity = yvelocity* -1;
+        }
+        //when the ball goes above the canvas it stops 
+        else if (yposition <= 0 )
+        {
+            yvelocity = yvelocity* -1;
+        }
+      
+        window.requestAnimationFrame(repeatme);
+      }
+      
       // Get the animation going.
+      repeatme();
     </script>
 
   </body>
