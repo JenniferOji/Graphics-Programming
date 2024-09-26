@@ -23,7 +23,16 @@
     <canvas id="canvas-for-ball" width="500" height="400"></canvas>
 
     <script type="text/javascript">
-
+      
+      // Gets a handle to the element with id canvasOne.
+      var canvas = document.getElementById("canvas-for-ball");
+      // Get a 2D context for the canvas.
+      var ctx = canvas.getContext("2d");
+      
+    
+        ctx.clearRect(0,0,500,400);
+       
+      // Get the animation going.
     </script>
 
   </body>
