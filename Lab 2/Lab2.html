@@ -77,7 +77,12 @@
             ctx.lineTo(x3,y3);
             ctx.stroke();
 
-           
+            //creating the bottom centre line
+            var x4 = (20 * Math.cos((Math.PI/2) + this.rotation)) + this.xposition;
+            var y4 = (20 * Math.sin((Math.PI/2) + this.rotation))+ this.yposition;
+            ctx.moveTo(this.xposition,this.yposition);
+            ctx.lineTo(x4,y4);
+            ctx.stroke();
 
 
         }
