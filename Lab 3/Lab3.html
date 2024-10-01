@@ -31,48 +31,22 @@
     // Get a 2D context for the canvas.
     var ctx = canvas.getContext("2d");
 
-     
-
     //Created paddle class 
     class Paddle {
-        constructor(xpos,ypos,width,heigth){
-            this.ypos = ypos;
-            this.xpos = xpos;
+        constructor(xposition,yposition,width,heigth){
+            this.xposition = xposition;
+            this.yposition = yposition;
             this.width = width;
             this.heigth = heigth;
         }
 
         draw(){
-            //offsetting the canvas position
-            var canvasPosition = {
-                x: canvas.offsetLeft,
-                y: canvas.offsetTop    
-            }
-
-            //drawing a rectangle based on when the user clicks 
-            canvas.addEventListener("click", function(event) 
-            { 
-                //finding the local mouse position
-                var mouse = {
-                x: event.clientX- canvasPosition.x,
-                y: event.clientY - canvasPosition.y
-                }
-
-             //  ctx.beginPath();
-                ctx.fillStyle = "rgb(255, 0, 0)";
-
-
-                //changed it to blue 
-                //ctx.fillStyle = "rgb(0, 0, 255)";
-                // Create a filled rectangle 
-                ctx.fillRect(mouse.x,mouse.y,this.width,this.heigth);
-                ctx.fill();
-                
-                //console.log(canvasPosition.x + " " + canvasPosition.y);
-            });
-
+            ctx.fillStyle = "rgb(255, 0, 0)";
+            ctx.fillRect(this.xposition,this.yposition,this.width,this.heigth);
 
         }
+                
+       
     }
 
     class Ball {
@@ -163,7 +137,7 @@
     //the parameters of the ball object that will be passed to the draw method 
     myBall = new Ball(20, 20, 3, 3, 20);
 
-    p1 = new Paddle(40,40,10,30);
+    p1 = new Paddle(30,30,15,60);
     //x,y,width,height
 
 
