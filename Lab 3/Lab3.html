@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+
+  <h1>Jennifer </h1>
+  <style type="text/css">
+    canvas {
+      border: black 10px solid;
+    }
+
+    body {
+      background-color: white;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <canvas id="canvas-for-ball" width="500" height="400"></canvas>
+
+  <script type="text/javascript">
+
+
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+
+    //Created paddle class 
+    class Paddle {
+        constructor(xposition,yposition,width,heigth){
+            this.yposition = yposition;
+            this.xposition = xposition;
+            this.width = width;
+            this.heigth = heigth;
+        }
+    }
+
+    class Ball {
+      constructor(xposition, yposition, yvelocity, xvelocity, radius) {
+        var rotation;
+        //the parameters of the ball class 
+        this.yposition = yposition;
+        this.xposition = xposition;
+        this.yvelocity = yvelocity;
+        this.xvelocity = xvelocity;
+        this.radius = radius;
+        this.rotation = 0; 
+      }
+
+
+      //the draw method to create what the ball looks like 
+      draw() {
+        ctx.beginPath();
+        //passing the parameters of the ball class 
+        ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        //creating the rotaion on the ball 
+        this.rotation = this.rotation + 0.045;
+
+        //creating the peace sign on the ball 
+        //creating the line on the right 
+        //radius * cos angle
+        //radius * sin angle 
+        var x1 = (20 * Math.cos((Math.PI / 4) + this.rotation)) + this.xposition;
+        var y1 = (20 * Math.sin((Math.PI / 4) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+
+        //creating the line on the left 
+        var x2 = (20 * Math.cos((3 * Math.PI / 4) + this.rotation)) + this.xposition;
+        var y2 = (20 * Math.sin((3 * Math.PI / 4) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+
+        //creating the top centre line
+        var x3 = (20 * Math.cos((6 * Math.PI / 4) + this.rotation)) + this.xposition;
+        var y3 = (20 * Math.sin((6 * Math.PI / 4) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x3, y3);
+        ctx.stroke();
+
+        //creating the bottom centre line
+        var x4 = (20 * Math.cos((Math.PI / 2) + this.rotation)) + this.xposition;
+        var y4 = (20 * Math.sin((Math.PI / 2) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x4, y4);
+        ctx.stroke();
+
+
+      }
+
+      //the method to make the ball move 
+      move() {
+        //adding to the positioning with every frame 
+        this.yposition += this.yvelocity;
+        this.xposition += this.xvelocity;
+
+        //reversing the ball if it reaching the end of the canvas 
+        //400-20 -> the radius of the ball
+        if (this.yposition >= 380) {
+          this.yvelocity = this.yvelocity * -1;
+        }
+        //when the ball goes above the canvas it stops 
+        else if (this.yposition <= 20) {
+          this.yvelocity = this.yvelocity * -1;
+        }
+        //for the x position 
+        //reversing the ball if it reaches the side of the canvas 
+        if (this.xposition >= 480) {
+          this.xvelocity = this.xvelocity * -1;
+        }
+        if (this.xposition <= 20) {
+          this.xvelocity = this.xvelocity * -1;
+        }
+
+      }
+    }
+
+    //created the ball object 
+    //the parameters of the ball object that will be passed to the draw method 
+    myBall = new Ball(20, 20, 3, 3, 20);
+
+    p1 = new Paddle(40,40,10,30);
+    //x,y,width,height
+
+
+
+    // A function to repeat every time the animation loops.
+    function repeatme() {
+      ctx.clearRect(0, 0, 500, 400);
+      //have the clear the rectangle at the start of the animation
+
+      //calling the methods 
+      myBall.draw();
+      myBall.move();
+
+      window.requestAnimationFrame(repeatme);
+    }
+
+    // Get the animation going.
+    repeatme();
+  </script>
+
+</body>
+
+</html>
