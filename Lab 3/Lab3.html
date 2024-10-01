@@ -31,13 +31,47 @@
     // Get a 2D context for the canvas.
     var ctx = canvas.getContext("2d");
 
+     
+
     //Created paddle class 
     class Paddle {
-        constructor(xposition,yposition,width,heigth){
-            this.yposition = yposition;
-            this.xposition = xposition;
+        constructor(xpos,ypos,width,heigth){
+            this.ypos = ypos;
+            this.xpos = xpos;
             this.width = width;
             this.heigth = heigth;
+        }
+
+        draw(){
+            //offsetting the canvas position
+            var canvasPosition = {
+                x: canvas.offsetLeft,
+                y: canvas.offsetTop    
+            }
+
+            //drawing a rectangle based on when the user clicks 
+            canvas.addEventListener("click", function(event) 
+            { 
+                //finding the local mouse position
+                var mouse = {
+                x: event.clientX- canvasPosition.x,
+                y: event.clientY - canvasPosition.y
+                }
+
+             //  ctx.beginPath();
+                ctx.fillStyle = "rgb(255, 0, 0)";
+
+
+                //changed it to blue 
+                //ctx.fillStyle = "rgb(0, 0, 255)";
+                // Create a filled rectangle 
+                ctx.fillRect(mouse.x,mouse.y,this.width,this.heigth);
+                ctx.fill();
+                
+                //console.log(canvasPosition.x + " " + canvasPosition.y);
+            });
+
+
         }
     }
 
@@ -96,7 +130,6 @@
         ctx.lineTo(x4, y4);
         ctx.stroke();
 
-
       }
 
       //the method to make the ball move 
@@ -143,6 +176,8 @@
       //calling the methods 
       myBall.draw();
       myBall.move();
+
+      p1.draw();
 
       window.requestAnimationFrame(repeatme);
     }
