@@ -47,7 +47,27 @@
         }
 
         move(){
+            //offsetting the canvas
+            var canvasPosition = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop    
+           }
 
+            
+            canvas.addEventListener("click", function(event) { 
+                //finding the local mouse position
+                var mouse = {
+                x: event.clientX- canvasPosition.x,
+                y: event.clientY - canvasPosition.y
+                }
+
+                ctx.beginPath();
+            
+                ctx.fillRect(mouse.x,mouse.y,this.width,this.heigth);
+
+                ctx.fill();
+            
+            });
         }
                 
        
