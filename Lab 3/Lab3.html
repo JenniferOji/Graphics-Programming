@@ -33,40 +33,40 @@
 
     //Created paddle class 
     class Paddle {
-        constructor(xposition,yposition,width,heigth){
+        constructor(xposition,yposition,width,height){
             this.xposition = xposition;
             this.yposition = yposition;
             this.width = width;
-            this.heigth = heigth;
+            this.height = height;
         }
 
         draw(){
             ctx.fillStyle = "rgb(0, 0, 225)";
-            ctx.fillRect(this.xposition,this.yposition,this.width,this.heigth);
+            ctx.fillRect(this.xposition,this.yposition,this.width,this.height);
 
         }
 
         move(){
+          var that = this;
+
             //offsetting the canvas
             var canvasPosition = {
             x: canvas.offsetLeft,
             y: canvas.offsetTop    
            }
 
-            
-            canvas.addEventListener("click", function(event) { 
-                //finding the local mouse position
-                var mouse = {
-                x: event.clientX- canvasPosition.x,
-                y: event.clientY - canvasPosition.y
-                }
+            //using mousemove t=so that the object follows the mouse instead of clicking where to go 
+            canvas.addEventListener("mousemove", function(event) { 
+              //finding the local mouse position
+              var mouse = {
+              //  x: event.clientX- canvasPosition.x,
+               y: event.clientY - canvasPosition.y
+              }
 
-                ctx.beginPath();
-            
-                ctx.fillRect(mouse.x,mouse.y,this.width,this.heigth);
+            //  that.xposition = mouse.x - that.width / 2;
+              that.yposition = mouse.y - that.height / 2;
 
-                ctx.fill();
-            
+              that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
             });
         }
                 
