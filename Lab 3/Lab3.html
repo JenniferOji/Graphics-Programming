@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html>
-
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <head>
   <meta charset="UTF-8">
   <title>Canvas</title>
@@ -67,6 +67,34 @@
               that.yposition = mouse.y - that.height / 2;
 
               that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
+            });
+
+
+            
+          //moving the paddle with the keys 
+          //javascript event listener to the keypress event.
+          window.addEventListener("keypress", function(event) { 
+            //logging the event to console 
+              console.log(event);
+          });
+
+          //keypresses with jQuery
+          $(document.body).on('keydown', function(e) {
+              console.log(e.which);
+              switch (e.which) {
+                // key code for up arrow
+                case 38:
+                  console.log('up arrow key pressed!');
+                  break;
+
+                // key code for down arrow
+                case 40:
+                  console.log('down arrow key pressed!');
+                  break;
+                }
+
+                //38 = up arrow 
+                //40 = down arrow
             });
         }
                 
