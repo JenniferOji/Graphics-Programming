@@ -176,6 +176,18 @@
           this.xvelocity = this.xvelocity * -1;
         }
 
+        ///bouncing back the ball if it touches the rectangle object 
+        if (this.xposition - this.radius <= p1.xposition + p1.width && //ball is left of the paddle right edge
+           this.xposition + this.radius >= p1.xposition && //ball is right of the paddle left edge
+           this.yposition + this.radius >= p1.yposition && //ball is below the paddle top edge
+           this.yposition - this.radius <= p1.yposition + p1.height) { //ball above the paddle bottom edge
+           this.xvelocity *= -1; // Reverse the x direction
+           // Move the ball out of the paddle to prevent sticking
+          this.xposition = p1.xposition + p1.width + this.radius; // Position the ball just outside the paddle
+        }
+
+        
+
       }
     }
 
