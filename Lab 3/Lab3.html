@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 
 <html>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
 <head>
   <meta charset="UTF-8">
   <title>Canvas</title>
-  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 
   <h1>Jennifer </h1>
   <style type="text/css">
@@ -47,51 +49,106 @@
         }
 
         move(){
-            var that = this;
+          var that = this;
 
             //offsetting the canvas
             var canvasPosition = {
             x: canvas.offsetLeft,
             y: canvas.offsetTop    
-          }
+           }
 
-            //using mousemove t=so that the object follows the mouse instead of clicking where to go 
+            //moving the paddle with the moouse 
             canvas.addEventListener("mousemove", function(event) { 
               //finding the local mouse position
               var mouse = {
               //  x: event.clientX- canvasPosition.x,
                y: event.clientY - canvasPosition.y
               }
-
-              //that.xposition = mouse.x - that.width / 2;
+              //87 top 83 bottom
+            //  that.xposition = mouse.x - that.width / 2;
               that.yposition = mouse.y - that.height / 2;
 
+              //preventing the rectangle object from going out of the canvas 
               that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
+
             });
 
 
-            
           //moving the paddle with the keys 
-          //javascript event listener to the keypress event.
+          // Add a Javascript event listener to the keypress event.
           window.addEventListener("keypress", function(event) { 
-            //logging the event to console 
+          // Just log the event to the console.
               console.log(event);
           });
 
           //keypresses with jQuery
           $(document.body).on('keydown', function(e) {
-            switch (e.which) {
-              case 38: //up arrow
-                that.yposition -= 0.05;
-                break;
-              case 40: //down arrow
-                that.yposition += 0.05;
-                break;
-            }
-            that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
-          });
+              console.log(e.which);
+
+             // that.yposition = mouse.y - that.height / 2;
+              
+              switch (e.which) {
+                case 87:
+                 // console.log(up arrow key pressed');
+                  //moving the object up when W key is pressed 
+                  that.yposition -= 10;
+                  break;
+
+                // key code for right arrow
+                case 83:
+                 // console.log(down arrow key pressed');
+                  //moving the object down when S key is pressed 
+                  that.yposition += 10;
+                  break;
+                }
+
+                that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
+
+            });
+
         }
-                
+
+        move2(){
+          var that = this;
+
+            //offsetting the canvas
+            var canvasPosition = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop    
+           }
+
+          //moving the paddle with the keys 
+          // Add a Javascript event listener to the keypress event.
+          window.addEventListener("keypress", function(event) { 
+          // Just log the event to the console.
+              console.log(event);
+          });
+
+          //keypresses with jQuery
+          $(document.body).on('keydown', function(e) {
+              console.log(e.which);
+
+             // that.yposition = mouse.y - that.height / 2;
+              
+              switch (e.which) {
+                case 38:
+                 // console.log(up arrow key pressed');
+                  //moving the object up
+                  that.yposition -= 10;
+                  break;
+
+                case 40:
+                 // console.log(down arrow key pressed');
+                  //moving the object down
+                  that.yposition += 10;
+                  break;
+                }
+
+                that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
+
+            });
+
+        }        
        
     }
 
@@ -176,16 +233,17 @@
           this.xvelocity = this.xvelocity * -1;
         }
 
-        ///bouncing back the ball if it touches the rectangle object 
+        //bouncing back the ball if it touches the rectangle object 
         if (this.xposition - this.radius <= p1.xposition + p1.width && //ball is left of the paddle right edge
            this.xposition + this.radius >= p1.xposition && //ball is right of the paddle left edge
            this.yposition + this.radius >= p1.yposition && //ball is below the paddle top edge
            this.yposition - this.radius <= p1.yposition + p1.height) { //ball above the paddle bottom edge
            this.xvelocity *= -1; // Reverse the x direction
-           //moving the ball out of the paddle to prevent sticking
+           // Move the ball out of the paddle to prevent sticking
           this.xposition = p1.xposition + p1.width + this.radius; // Position the ball just outside the paddle
         }
 
+        
         //bouncing back the ball if it touches the rectangle object 
         if (this.xposition - this.radius <= p2.xposition + p2.width && //ball is left of the paddle right edge
            this.xposition + this.radius >= p2.xposition && //ball is right of the paddle left edge
@@ -195,10 +253,7 @@
            // Move the ball out of the paddle to prevent sticking
           this.xposition = p2.xposition - this.radius; // Position the ball just outside the paddle
         }
-
-
-        
-
+       
       }
     }
 
@@ -208,13 +263,12 @@
 
     p1 = new Paddle(15,30,15,60);
     p2 = new Paddle(470,30,15,60);
-
+    
     //x,y,width,height
 
     //have to instantiate outside the repeatme method or else the move method wont work 
     p1.move();
-    p2.move();
-
+    p2.move2();
 
     // A function to repeat every time the animation loops.
     function repeatme() {
@@ -228,8 +282,6 @@
       //calling the method for the paddle class
       p1.draw();
       p2.draw();
-
-     
       window.requestAnimationFrame(repeatme);
     }
 
