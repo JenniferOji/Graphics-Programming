@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 
 <html>
-  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <head>
   <meta charset="UTF-8">
   <title>Canvas</title>
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 
   <h1>Jennifer </h1>
   <style type="text/css">
@@ -47,13 +47,13 @@
         }
 
         move(){
-          var that = this;
+            var that = this;
 
             //offsetting the canvas
             var canvasPosition = {
             x: canvas.offsetLeft,
             y: canvas.offsetTop    
-           }
+          }
 
             //using mousemove t=so that the object follows the mouse instead of clicking where to go 
             canvas.addEventListener("mousemove", function(event) { 
@@ -63,7 +63,7 @@
                y: event.clientY - canvasPosition.y
               }
 
-            //  that.xposition = mouse.x - that.width / 2;
+              //that.xposition = mouse.x - that.width / 2;
               that.yposition = mouse.y - that.height / 2;
 
               that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
@@ -80,22 +80,16 @@
 
           //keypresses with jQuery
           $(document.body).on('keydown', function(e) {
-              console.log(e.which);
-              switch (e.which) {
-                // key code for up arrow
-                case 38:
-                  console.log('up arrow key pressed!');
-                  break;
-
-                // key code for down arrow
-                case 40:
-                  console.log('down arrow key pressed!');
-                  break;
-                }
-
-                //38 = up arrow 
-                //40 = down arrow
-            });
+            switch (e.which) {
+              case 38: //up arrow
+                that.yposition -= 0.05;
+                break;
+              case 40: //down arrow
+                that.yposition += 0.05;
+                break;
+            }
+            that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
+          });
         }
                 
        
