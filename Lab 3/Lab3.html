@@ -155,6 +155,7 @@
     class Ball {
       constructor(xposition, yposition, yvelocity, xvelocity, radius) {
         var rotation;
+        var rotationSpeed;
         //the parameters of the ball class 
         this.yposition = yposition;
         this.xposition = xposition;
@@ -162,18 +163,21 @@
         this.xvelocity = xvelocity;
         this.radius = radius;
         this.rotation = 0; 
+        this.rotationSpeed = 0.02; //the initial rotation speed 
+        
       }
 
 
       //the draw method to create what the ball looks like 
       draw() {
+        var that = this;
         ctx.beginPath();
         //passing the parameters of the ball class 
         ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
         ctx.stroke();
 
         //creating the rotaion on the ball 
-        this.rotation = this.rotation + 0.045;
+        this.rotation = this.rotation + this.rotationSpeed;
 
         //creating the peace sign on the ball 
         //creating the line on the right 
@@ -269,6 +273,22 @@
     //have to instantiate outside the repeatme method or else the move method wont work 
     p1.move();
     p2.move2();
+
+    //to control the speed of the ball 
+    //keypresses with jQuery
+    $(document.body).on('keydown', function(e) {
+    switch (e.which) {
+        case 37:
+        //reducing the speed when the left arrow key is pressed 
+        myBall.rotationSpeed -= 0.01;
+        break;
+
+        case 39:
+        //increasing speed when right arrow key is pressed
+        myBall.rotationSpeed += 0.01;
+        break;
+      }
+    });
 
     // A function to repeat every time the animation loops.
     function repeatme() {
