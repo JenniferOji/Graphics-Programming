@@ -23,7 +23,7 @@
 
 <body>
 
-  <canvas id="canvas-for-ball" width="500" height="400"></canvas>
+  <canvas id="canvas-for-ball" width="600" height="500"></canvas>
 
   <script type="text/javascript">
 
@@ -116,6 +116,22 @@
             x: canvas.offsetLeft,
             y: canvas.offsetTop    
            }
+
+           //moving the paddle with the moousebut using a click instead
+           canvas.addEventListener("click", function(event) { 
+              //finding the local mouse position
+              var mouse = {
+              //  x: event.clientX- canvasPosition.x,
+               y: event.clientY - canvasPosition.y
+              }
+              //87 top 83 bottom
+            //  that.xposition = mouse.x - that.width / 2;
+              that.yposition = mouse.y - that.height / 2;
+
+              //preventing the rectangle object from going out of the canvas 
+              that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.height));
+
+            });
 
           //moving the paddle with the keys 
           // Add a Javascript event listener to the keypress event.
@@ -215,58 +231,64 @@
 
       //the method to make the ball move 
       move() {
-        //adding to the positioning with every frame 
+        //adding the the velocity slows the ball dwon overtime instead of keeping it at a constant acceleration 
+        var slowing = 0.5; 
+        this.yvelocity += slowing;
+
         this.yposition += this.yvelocity;
         this.xposition += this.xvelocity;
 
         //reversing the ball if it reaching the end of the canvas 
         //400-20 -> the radius of the ball
-        if (this.yposition >= 380) {
-          this.yvelocity = this.yvelocity * -1;
+        if (this.yposition >= 480) {
+            this.yposition = 480; 
+            //kinetic energy loss of 90%
+            this.yvelocity = this.yvelocity * -0.9; 
         }
         //when the ball goes above the canvas it stops 
         else if (this.yposition <= 20) {
-          this.yvelocity = this.yvelocity * -1;
+            this.yposition = 20; 
+            this.yvelocity = this.yvelocity * -0.9; 
         }
+
         //for the x position 
         //reversing the ball if it reaches the side of the canvas 
-        if (this.xposition >= 480) {
+
+        if (this.xposition >= 580) {
           this.xvelocity = this.xvelocity * -1;
         }
         if (this.xposition <= 20) {
           this.xvelocity = this.xvelocity * -1;
         }
 
-        //bouncing back the ball if it touches the rectangle object 
-        if (this.xposition - this.radius <= p1.xposition + p1.width && //ball is left of the paddle right edge
-           this.xposition + this.radius >= p1.xposition && //ball is right of the paddle left edge
-           this.yposition + this.radius >= p1.yposition && //ball is below the paddle top edge
-           this.yposition - this.radius <= p1.yposition + p1.height) { //ball above the paddle bottom edge
-           this.xvelocity *= -1; // Reverse the x direction
-           // Move the ball out of the paddle to prevent sticking
-          this.xposition = p1.xposition + p1.width + this.radius; // Position the ball just outside the paddle
+        /*
+        //code from stack overflow 
+        if (this.xposition - this.radius <= p1.xposition + p1.width &&
+            this.xposition + this.radius >= p1.xposition &&
+            this.yposition + this.radius >= p1.yposition &&
+            this.yposition - this.radius <= p1.yposition + p1.height) {
+            this.xvelocity *= -1; // Reverse the x direction
+            // Move the ball out of the paddle to prevent sticking
+            this.xposition = p1.xposition + p1.width + this.radius; // Position the ball just outside the paddle
         }
 
-        
-        //bouncing back the ball if it touches the rectangle object 
-        if (this.xposition - this.radius <= p2.xposition + p2.width && //ball is left of the paddle right edge
-           this.xposition + this.radius >= p2.xposition && //ball is right of the paddle left edge
-           this.yposition + this.radius >= p2.yposition && //ball is below the paddle top edge
-           this.yposition - this.radius <= p2.yposition + p2.height) { //ball above the paddle bottom edge
-           this.xvelocity *= -1; // Reverse the x direction
-           // Move the ball out of the paddle to prevent sticking
-          this.xposition = p2.xposition - this.radius; // Position the ball just outside the paddle
-        }
-       
-      }
+        if (this.xposition - this.radius <= p2.xposition + p2.width &&
+            this.xposition + this.radius >= p2.xposition &&
+            this.yposition + this.radius >= p2.yposition &&
+            this.yposition - this.radius <= p2.yposition + p2.height) {
+            this.xvelocity *= -1; // Reverse the x direction
+            this.xposition = p2.xposition - this.radius; // Position the ball just outside the paddle
+        }*/
+    }
+
     }
 
     //created the ball object 
     //the parameters of the ball object that will be passed to the draw method 
-    myBall = new Ball(20, 20, 3, 3, 20);
+    myBall = new Ball(20, 20, 10, 1, 20);
 
-    p1 = new Paddle(15,30,15,60);
-    p2 = new Paddle(470,30,15,60);
+    p1 = new Paddle(5,30,15,70);
+    p2 = new Paddle(580,30,15,70);
     
     //x,y,width,height
 
@@ -292,7 +314,7 @@
 
     // A function to repeat every time the animation loops.
     function repeatme() {
-      ctx.clearRect(0, 0, 500, 400);
+      ctx.clearRect(0, 0, 600, 600);
       //have the clear the rectangle at the start of the animation
 
       //calling the methods for the ball class
