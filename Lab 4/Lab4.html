@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+
+  <h1>Jennifer </h1>
+  <style type="text/css">
+    canvas {
+      border: black 10px solid;
+    }
+
+    body {
+      background-color: white;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <canvas id="canvas-for-ball" width="600" height="500"></canvas>
+
+  <script type="text/javascript">
+
+
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+
+    var canvasPosition = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop    
+          }
+
+    //Created paddle class 
+    class Paddle {
+      //paddle class takes in parameters to make a circle
+      constructor(xposition, yposition, radius) {
+        this.yposition = yposition;
+        this.xposition = xposition;
+        
+        this.radius = radius;
+        
+      }
+
+        draw(){
+          //the paddle is now a circle 
+          var that = this;
+          ctx.beginPath();
+          //passing the parameters of the ball class 
+          ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
+          ctx.stroke();
+          
+        }
+
+        move(){
+          var that = this;
+
+          //offsetting the canvas
+          var canvasPosition = {
+          x: canvas.offsetLeft,
+          y: canvas.offsetTop    
+          }
+
+          //moving the paddle with the moouse 
+          canvas.addEventListener("mousemove", function(event) { 
+            //finding the local mouse position
+            var mouse = {
+            //  x: event.clientX- canvasPosition.x,
+            y: event.clientY - canvasPosition.y
+            }
+            //87 top 83 bottom
+          //  that.xposition = mouse.x - that.width / 2;
+            that.yposition = mouse.y
+
+            console.log(canvasPosition.x + " " + canvasPosition.y);
+
+            //preventing the rectangle object from going out of the canvas 
+            that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.radius));
+
+          });
+        }
+   
+       
+    }
+
+    class Ball {
+      constructor(xposition, yposition, yvelocity, xvelocity, radius) {
+        var rotation;
+        var rotationSpeed;
+        //the parameters of the ball class 
+        this.yposition = yposition;
+        this.xposition = xposition;
+        this.yvelocity = yvelocity;
+        this.xvelocity = xvelocity;
+        this.radius = radius;
+        this.rotation = 0; 
+        this.rotationSpeed = 0.02; //the initial rotation speed 
+        
+      }
+
+
+      //the draw method to create what the ball looks like 
+      draw() {
+        var that = this;
+        ctx.beginPath();
+        //passing the parameters of the ball class 
+        ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        //creating the rotaion on the ball 
+        this.rotation = this.rotation + this.rotationSpeed;
+
+        //creating the peace sign on the ball 
+        //creating the line on the right 
+        //radius * cos angle
+        //radius * sin angle 
+        var x1 = (20 * Math.cos((Math.PI / 4) + this.rotation)) + this.xposition;
+        var y1 = (20 * Math.sin((Math.PI / 4) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+
+        //creating the line on the left 
+        var x2 = (20 * Math.cos((3 * Math.PI / 4) + this.rotation)) + this.xposition;
+        var y2 = (20 * Math.sin((3 * Math.PI / 4) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+
+        //creating the top centre line
+        var x3 = (20 * Math.cos((6 * Math.PI / 4) + this.rotation)) + this.xposition;
+        var y3 = (20 * Math.sin((6 * Math.PI / 4) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x3, y3);
+        ctx.stroke();
+
+        //creating the bottom centre line
+        var x4 = (20 * Math.cos((Math.PI / 2) + this.rotation)) + this.xposition;
+        var y4 = (20 * Math.sin((Math.PI / 2) + this.rotation)) + this.yposition;
+        ctx.moveTo(this.xposition, this.yposition);
+        ctx.lineTo(x4, y4);
+        ctx.stroke();
+
+      }
+
+      //the method to make the ball move 
+      move() {
+        //adding the the velocity slows the ball dwon overtime instead of keeping it at a constant acceleration 
+        var slowing = 0.5; 
+        this.yvelocity += slowing;
+
+        this.yposition += this.yvelocity;
+        this.xposition += this.xvelocity;
+
+        //reversing the ball if it reaching the end of the canvas 
+        //400-20 -> the radius of the ball
+        if (this.yposition >= 480) {
+            this.yposition = 480; 
+            //kinetic energy loss of 90%
+            this.yvelocity = this.yvelocity * -0.9; 
+        }
+        //when the ball goes above the canvas it stops 
+        else if (this.yposition <= 20) {
+            this.yposition = 20; 
+            this.yvelocity = this.yvelocity * -0.9; 
+        }
+
+        //for the x position 
+        //reversing the ball if it reaches the side of the canvas 
+
+        if (this.xposition >= 580) {
+          this.xvelocity = this.xvelocity * -1;
+        }
+        if (this.xposition <= 20) {
+          this.xvelocity = this.xvelocity * -1;
+        }
+
+    }
+
+    }
+
+    //created the ball object 
+    //the parameters of the ball object that will be passed to the draw method 
+    myBall = new Ball(20, 20, 10, 1, 20);
+    paddle1 = new Paddle(20, 20, 20);
+
+   // pB1.move();
+
+   // p1 = new Paddle(5,30,15,70);
+    //p2 = new Paddle(580,30,15,70);
+    
+    //x,y,width,height
+
+    //have to instantiate outside the repeatme method or else the move method wont work 
+   // p1.move();
+   // p2.move2();
+
+    //to control the speed of the ball 
+    //keypresses with jQuery
+    $(document.body).on('keydown', function(e) {
+    switch (e.which) {
+        case 37:
+        //reducing the speed when the left arrow key is pressed 
+        myBall.rotationSpeed -= 0.01;
+        break;
+
+        case 39:
+        //increasing speed when right arrow key is pressed
+        myBall.rotationSpeed += 0.01;
+        break;
+      }
+    });
+
+    //checkcollision functionn 
+
+    // A function to repeat every time the animation loops.
+    function repeatme() {
+      ctx.clearRect(0, 0, 600, 600);
+      //have the clear the rectangle at the start of the animation
+
+      //calling the methods for the ball class
+      myBall.draw();
+      myBall.move();
+
+      paddle1.draw();
+      paddle1.move();
+
+      //calling the method for the paddle class
+      //p1.draw();
+      //p2.draw();
+      window.requestAnimationFrame(repeatme);
+    }
+
+    // Get the animation going.
+    repeatme();
+
+    //check collision calling 
+  </script>
+
+</body>
+
+</html>
