@@ -227,8 +227,10 @@
       var collision = paddle1.radius + myBall.radius;
       
       if (distance <= collision){
-        myBall.xposition += 5;
         text = true;
+        myBall.yvelocity = myBall.yvelocity *-1;
+        myBall.yposition += myBall.yvelocity;
+
         ctx.font = "50px Arial";
         ctx.fillText("Collision detected", 10, 80);
 
