@@ -189,8 +189,8 @@
 
     //created the ball object 
     //the parameters of the ball object that will be passed to the draw method 
-    myBall = new Ball(20, 20, 10, 1, 20);
-    paddle1 = new Paddle(20, 20, 20);
+    myBall = new Ball(20, 20, 5, 5, 20);
+    paddle1 = new Paddle(20, 200, 20);
 
    // pB1.move();
 
@@ -219,16 +219,26 @@
       }
     });
 
-    //checkcollision functionn 
+    var text = false;
+    //check collision functionn 
     function collisionDetection(){
       var distance = Math.sqrt(Math.pow(paddle1.xposition-myBall.xposition,2)+Math.pow(paddle1.yposition-myBall.yposition,2));
-      console.log(distance);
+      //console.log(distance);
+      var collision = paddle1.radius + myBall.radius;
+      
+      if (distance <= collision){
+        myBall.xposition += 5;
+        text = true;
+        ctx.font = "50px Arial";
+        ctx.fillText("Collision detected", 10, 80);
 
-      if (distance < 40){
-      //  myBall.yvelocity = myBall *-1;
-      }
+      //set time function allows you to display something for a certain amount of time 
+      setTimeout(function() {
+        showCollisionText = false; 
+      }, 750);
 
     }
+  }
 
     // A function to repeat every time the animation loops.
     function repeatme() {      
@@ -241,8 +251,6 @@
 
       paddle1.draw();
       paddle1.move();
-
-      //calling the function to check if there is a collision 
       collisionDetection();
 
       //calling the method for the paddle class
