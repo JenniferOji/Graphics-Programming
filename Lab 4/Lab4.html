@@ -23,7 +23,7 @@
 
 <body>
 
-  <canvas id="canvas-for-ball" width="600" height="500"></canvas>
+  <canvas id="canvas-for-ball" width="600" height="600"></canvas>
 
   <script type="text/javascript">
 
@@ -31,7 +31,11 @@
     // Gets a handle to the element with id canvasOne.
     var canvas = document.getElementById("canvas-for-ball");
     // Get a 2D context for the canvas.
-    var ctx = canvas.getContext("2d");
+    var ctx = canvas.getContext("2d",10,10);
+
+    //tracking the score variables
+    var paddle1Score = 0;
+    var paddle2Score = 0;
 
     var canvasPosition = {
             x: canvas.offsetLeft,
@@ -189,8 +193,12 @@
 
     //created the ball object 
     //the parameters of the ball object that will be passed to the draw method 
-    myBall = new Ball(20, 20, 5, 5, 20);
+    //myBall = new Ball(20, 20, 5, 5, 20);
+    
+    matchBall = new Ball(20, 20, 5, 5, 20);
     paddle1 = new Paddle(20, 200, 20);
+    paddle2 = new Paddle(580, 200, 20);
+
 
    // pB1.move();
 
@@ -209,27 +217,57 @@
     switch (e.which) {
         case 37:
         //reducing the speed when the left arrow key is pressed 
-        myBall.rotationSpeed -= 0.01;
+        matchBall.rotationSpeed -= 0.01;
         break;
 
         case 39:
         //increasing speed when right arrow key is pressed
-        myBall.rotationSpeed += 0.01;
+        matchBall.rotationSpeed += 0.01;
         break;
       }
     });
 
+    //variable for the text timer 
     var text = false;
+    //tracking the score variables
+    var paddle1Score = 0;
+    var paddle2Score = 0;
+    
     //check collision functionn 
     function collisionDetection(){
-      var distance = Math.sqrt(Math.pow(paddle1.xposition-myBall.xposition,2)+Math.pow(paddle1.yposition-myBall.yposition,2));
+      var distance1 = Math.sqrt(Math.pow(paddle1.xposition-matchBall.xposition,2)+Math.pow(paddle1.yposition-matchBall.yposition,2));
+      var distance2 = Math.sqrt(Math.pow(paddle2.xposition-matchBall.xposition,2)+Math.pow(paddle2.yposition-matchBall.yposition,2));
+
       //console.log(distance);
-      var collision = paddle1.radius + myBall.radius;
-      
-      if (distance <= collision){
+      var collision = paddle1.radius + matchBall.radius;
+      //tracking if collission was detected
+      let collisionDetected = false; 
+
+      if (distance1 <= collision){
         text = true;
-        myBall.yvelocity = myBall.yvelocity *-1;
-        myBall.yposition += myBall.yvelocity;
+        paddle1Score ++;
+        console.log("Paddle 1 score : " + paddle1Score);
+        matchBall.yvelocity = matchBall.yvelocity *-1;
+        matchBall.yposition += matchBall.yvelocity;
+        matchBall.xposition += matchBall.xvelocity;
+
+
+        ctx.font = "50px Arial";
+        ctx.fillText("Collision detected", 10, 80);
+
+      //set time function allows you to display something for a certain amount of time 
+      setTimeout(function() {
+        showCollisionText = false; 
+      }, 750);
+
+    }
+
+    if (distance2 <= collision){
+        text = true;
+        paddle2Score += 1;
+        console.log("Paddel 2 score: " + paddle2Score);
+        matchBall.yvelocity = matchBall.yvelocity *-1;
+        matchBall.yposition += matchBall.yvelocity;
 
         ctx.font = "50px Arial";
         ctx.fillText("Collision detected", 10, 80);
@@ -248,12 +286,18 @@
       //have the clear the rectangle at the start of the animation
 
       //calling the methods for the ball class
-      myBall.draw();
-      myBall.move();
+      matchBall.draw();
+      matchBall.move();
 
       paddle1.draw();
       paddle1.move();
+
+      paddle2.draw();
+      paddle2.move();
       collisionDetection();
+
+      ctx.fillText("Paddle 1 Score: " + paddle1Score,20,550); 
+      ctx.fillText("Paddle 2 Score: " + paddle2Score,20,580); 
 
       //calling the method for the paddle class
       //p1.draw();
