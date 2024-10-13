@@ -154,8 +154,8 @@
       //the method to make the ball move 
       move() {
         //adding the the velocity slows the ball dwon overtime instead of keeping it at a constant acceleration 
-        var slowing = 0.5; 
-        this.yvelocity += slowing;
+        //var slowing = 0.5; 
+        //this.yvelocity += slowing;
 
         this.yposition += this.yvelocity;
         this.xposition += this.xvelocity;
@@ -165,12 +165,12 @@
         if (this.yposition >= 480) {
             this.yposition = 480; 
             //kinetic energy loss of 90%
-            this.yvelocity = this.yvelocity * -0.9; 
+            this.yvelocity = this.yvelocity * -1; 
         }
         //when the ball goes above the canvas it stops 
         else if (this.yposition <= 20) {
             this.yposition = 20; 
-            this.yvelocity = this.yvelocity * -0.9; 
+            this.yvelocity = this.yvelocity * -1; 
         }
 
         //for the x position 
@@ -220,9 +220,18 @@
     });
 
     //checkcollision functionn 
+    function collisionDetection(){
+      var distance = Math.sqrt(Math.pow(paddle1.xposition-myBall.xposition,2)+Math.pow(paddle1.yposition-myBall.yposition,2));
+      console.log(distance);
+
+      if (distance < 40){
+      //  myBall.yvelocity = myBall *-1;
+      }
+
+    }
 
     // A function to repeat every time the animation loops.
-    function repeatme() {
+    function repeatme() {      
       ctx.clearRect(0, 0, 600, 600);
       //have the clear the rectangle at the start of the animation
 
@@ -233,6 +242,9 @@
       paddle1.draw();
       paddle1.move();
 
+      //calling the function to check if there is a collision 
+      collisionDetection();
+
       //calling the method for the paddle class
       //p1.draw();
       //p2.draw();
@@ -241,6 +253,8 @@
 
     // Get the animation going.
     repeatme();
+   
+
 
     //check collision calling 
   </script>
