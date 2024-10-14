@@ -311,18 +311,6 @@
     paddle1 = new Paddle(20, 200, 20);
     paddle2 = new Paddle(580, 200, 20);
 
-
-   // pB1.move();
-
-   // p1 = new Paddle(5,30,15,70);
-    //p2 = new Paddle(580,30,15,70);
-    
-    //x,y,width,height
-
-    //have to instantiate outside the repeatme method or else the move method wont work 
-   // p1.move();
-   // p2.move2();
-
     //to control the speed of the ball 
     //keypresses with jQuery
     $(document.body).on('keydown', function(e) {
@@ -347,11 +335,13 @@
     
     //check collision functionn 
     function collisionDetection(){
-      var distance1 = Math.sqrt(Math.pow(paddle1.xposition-matchBall.xposition,2)+Math.pow(paddle1.yposition-matchBall.yposition,2));
-      var distance2 = Math.sqrt(Math.pow(paddle2.xposition-matchBall.xposition,2)+Math.pow(paddle2.yposition-matchBall.yposition,2));
+      var allBalls = [...Balls,matchBall];
+      allBalls.forEach(function (ball){
+      var distance1 = Math.sqrt(Math.pow(paddle1.xposition-ball.xposition,2)+Math.pow(paddle1.yposition-ball.yposition,2));
+      var distance2 = Math.sqrt(Math.pow(paddle2.xposition-ball.xposition,2)+Math.pow(paddle2.yposition-ball.yposition,2));
 
       //console.log(distance);
-      var collision = paddle1.radius + matchBall.radius;
+      var collision = paddle1.radius + ball.radius;
       //tracking if collission was detected
 
       if (distance1 <= collision){
@@ -359,9 +349,9 @@
         paddle1Score ++;
         console.log("Paddle 1 score : " + paddle1Score);
         //reversing the trajctory of the ball 
-        matchBall.xvelocity *= -1;
+        ball.xvelocity *= -1;
         //updating the balls position 
-        matchBall.xposition = paddle1.xposition + collision;
+        ball.xposition = paddle1.xposition + collision;
 
 
         ctx.fillStyle = "red";
@@ -375,27 +365,39 @@
 
     }
 
-    if (distance2 <= collision){
-        text = true;
-        paddle2Score += 1;
-        console.log("Paddel 2 score: " + paddle2Score);
-        matchBall.xvelocity *= -1;
+      if (distance2 <= collision){
+          text = true;
+          paddle2Score += 1;
+          console.log("Paddel 2 score: " + paddle2Score);
+          ball.xvelocity *= -1;
 
-        matchBall.xposition = paddle2.xposition - collision;
+          ball.xposition = paddle2.xposition - collision;
 
-        ctx.fillStyle = "red";
-        ctx.font = "50px Arial";
-        ctx.fillText("Collision detected", 100, 80);
+          ctx.fillStyle = "red";
+          ctx.font = "50px Arial";
+          ctx.fillText("Collision detected", 100, 80);
 
 
-      //set time function allows you to display something for a certain amount of time 
-      setTimeout(function() {
-        showCollisionText = false; 
-      }, 750);
+        //set time function allows you to display something for a certain amount of time 
+        setTimeout(function() {
+          showCollisionText = false; 
+        }, 750);
 
-    }
+      }
+    });
   }
 
+  //creating more match balls 
+  var Balls = [];
+  function newBall(){
+    //Creating a ball object and pushing it to the ball array
+    var matchBall = new Ball(50, 100, 5, 5, 20);
+    Balls.push(matchBall);
+ }
+
+    canvas.addEventListener("dblclick", function(event) { 
+       newBall();
+   });
 
     // A function to repeat every time the animation loops.
     function repeatme() {      
@@ -416,12 +418,16 @@
       ctx.font = "20px Arial"; 
       ctx.fillStyle = "black"; 
       ctx.fillText("Paddle 1 Score: " + paddle1Score,20,550); 
-      ctx.fillText("Paddle 2 Score: " + paddle2Score,420,550); 
-
+      ctx.fillText("Paddle 2 Score: " + paddle2Score,400,550); 
  
       //calling the method for the paddle class
       //p1.draw();
       //p2.draw();
+      Balls.forEach(function(ball) {
+            ball.move();
+            ball.draw();
+        });
+
       window.requestAnimationFrame(repeatme);
     }
 
