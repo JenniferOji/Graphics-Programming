@@ -157,10 +157,6 @@
 
       //the method to make the ball move 
       move() {
-        //adding the the velocity slows the ball dwon overtime instead of keeping it at a constant acceleration 
-        //var slowing = 0.5; 
-        //this.yvelocity += slowing;
-
         this.yposition += this.yvelocity;
         this.xposition += this.xvelocity;
 
@@ -168,8 +164,8 @@
         //400-20 -> the radius of the ball
         if (this.yposition >= 480) {
             this.yposition = 480; 
-            //kinetic energy loss of 90%
             this.yvelocity = this.yvelocity * -1; 
+
         }
         //when the ball goes above the canvas it stops 
         else if (this.yposition <= 20) {
@@ -182,9 +178,14 @@
 
         if (this.xposition >= 580) {
           this.xvelocity = this.xvelocity * -1;
+          //if it touches the right wall the second paddle loses a point 
+          paddle2Score --;
+
         }
         if (this.xposition <= 20) {
           this.xvelocity = this.xvelocity * -1;
+          //if it touches the right wall the second paddle loses a point 
+          paddle1Score --;
         }
 
     }
@@ -241,15 +242,15 @@
       //console.log(distance);
       var collision = paddle1.radius + matchBall.radius;
       //tracking if collission was detected
-      let collisionDetected = false; 
 
       if (distance1 <= collision){
         text = true;
         paddle1Score ++;
         console.log("Paddle 1 score : " + paddle1Score);
-        matchBall.yvelocity = matchBall.yvelocity *-1;
-        matchBall.yposition += matchBall.yvelocity;
-        matchBall.xposition += matchBall.xvelocity;
+        //reversing the trajctory of the ball 
+        matchBall.xvelocity *= -1;
+        //updating the balls position 
+        matchBall.xposition = paddle1.xposition + collision;
 
 
         ctx.font = "50px Arial";
@@ -266,11 +267,12 @@
         text = true;
         paddle2Score += 1;
         console.log("Paddel 2 score: " + paddle2Score);
-        matchBall.yvelocity = matchBall.yvelocity *-1;
-        matchBall.yposition += matchBall.yvelocity;
+        matchBall.xvelocity *= -1;
+
+        matchBall.xposition = paddle2.xposition - collision;
 
         ctx.font = "50px Arial";
-        ctx.fillText("Collision detected", 10, 80);
+        ctx.fillText("Collision detected", 50, 80);
 
       //set time function allows you to display something for a certain amount of time 
       setTimeout(function() {
@@ -296,8 +298,10 @@
       paddle2.move();
       collisionDetection();
 
+      ctx.font = "20px Arial"; 
+      ctx.fillStyle = "black"; 
       ctx.fillText("Paddle 1 Score: " + paddle1Score,20,550); 
-      ctx.fillText("Paddle 2 Score: " + paddle2Score,20,580); 
+      ctx.fillText("Paddle 2 Score: " + paddle2Score,420,550); 
 
       //calling the method for the paddle class
       //p1.draw();
