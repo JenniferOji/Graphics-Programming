@@ -335,7 +335,9 @@
     
     //check collision functionn 
     function collisionDetection(){
+      //... is pointing to all the objects in the ball array 
       var allBalls = [...Balls,matchBall];
+      //foreach allows all balls to be checked for collision 
       allBalls.forEach(function (ball){
       var distance1 = Math.sqrt(Math.pow(paddle1.xposition-ball.xposition,2)+Math.pow(paddle1.yposition-ball.yposition,2));
       var distance2 = Math.sqrt(Math.pow(paddle2.xposition-ball.xposition,2)+Math.pow(paddle2.yposition-ball.yposition,2));
@@ -389,16 +391,45 @@
 
   //creating more match balls 
   var Balls = [];
+
+  //function to add a new ball
   function newBall(){
     //Creating a ball object and pushing it to the ball array
-    var matchBall = new Ball(50, 100, 5, 5, 20);
+    var matchBall = new Ball(50, 100, 2, 2, 20);
     Balls.push(matchBall);
  }
 
-    canvas.addEventListener("dblclick", function(event) { 
+ function deleteBall(event){
+  //offsetting the canvas position
+  var canvasPosition = {
+        x: canvas.offsetLeft,
+        y: canvas.offsetTop    
+      }
+
+      //finding the local mouse position
+      var mouse = {
+        x: event.clientX- canvasPosition.x,
+        y: event.clientY - canvasPosition.y
+      }
+
+      for (var i = 0; i<Balls.length; i++){
+        //looping through all the balls to calculate the distance 
+        var ball = Balls[i];
+        var distance = Math.sqrt(Math.pow(mouse.x - ball.xposition, 2) + Math.pow(mouse.y - ball.yposition, 2));
+
+        if (distance < ball.radius) {
+          Balls.splice(i, 1); 
+          break; 
+        }
+      }
+ }
+ //calling the method to add a new ball when theres a double click 
+  canvas.addEventListener("dblclick", function(event) { 
        newBall();
    });
 
+   //calling the method to delete a ball when theres a click 
+   canvas.addEventListener("click", deleteBall);
     // A function to repeat every time the animation loops.
     function repeatme() {      
       ctx.clearRect(0, 0, 600, 600);
@@ -423,6 +454,8 @@
       //calling the method for the paddle class
       //p1.draw();
       //p2.draw();
+
+      //for every ball in the matchball object array it calls these methods 
       Balls.forEach(function(ball) {
             ball.move();
             ball.draw();
