@@ -114,8 +114,12 @@
       draw() {
         var that = this;
         ctx.beginPath();
+        ctx.fillStyle = "green";
+        ctx.stroke();
         //passing the parameters of the ball class 
         ctx.arc(this.xposition, this.yposition, this.radius, 0, 2 * Math.PI);
+        ctx.fill();
+
         ctx.stroke();
 
         //creating the rotaion on the ball 
@@ -253,8 +257,9 @@
         matchBall.xposition = paddle1.xposition + collision;
 
 
+        ctx.fillStyle = "red";
         ctx.font = "50px Arial";
-        ctx.fillText("Collision detected", 10, 80);
+        ctx.fillText("Collision detected", 100, 80);
 
       //set time function allows you to display something for a certain amount of time 
       setTimeout(function() {
@@ -271,8 +276,9 @@
 
         matchBall.xposition = paddle2.xposition - collision;
 
+        ctx.fillStyle = "red";
         ctx.font = "50px Arial";
-        ctx.fillText("Collision detected", 50, 80);
+        ctx.fillText("Collision detected", 100, 80);
 
       //set time function allows you to display something for a certain amount of time 
       setTimeout(function() {
