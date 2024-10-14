@@ -32,6 +32,7 @@
     var canvas = document.getElementById("canvas-for-ball");
     // Get a 2D context for the canvas.
     var ctx = canvas.getContext("2d",10,10);
+    
 
     //tracking the score variables
     var paddle1Score = 0;
@@ -80,16 +81,122 @@
             y: event.clientY - canvasPosition.y
             }
             //87 top 83 bottom
-          //  that.xposition = mouse.x - that.width / 2;
+            //  that.xposition = mouse.x - that.width / 2;
             that.yposition = mouse.y
 
+            //not allowing the bal to move up the canvas 
+            if (that.yposition <=20){
+              that.yposition = 20;
+            }
+
+            if (that.yposition >=500){
+              that.yposition = 480;
+            }
             console.log(canvasPosition.x + " " + canvasPosition.y);
 
-            //preventing the rectangle object from going out of the canvas 
+            //preventing the object from going out of the canvas 
             that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.radius));
 
           });
+
+          //keypresses with jQuery
+          $(document.body).on('keydown', function(e) {
+              console.log(e.which);
+
+             // that.yposition = mouse.y - that.height / 2;
+              
+              switch (e.which) {
+                case 87:
+                 // console.log(up arrow key pressed');
+                  //moving the object up
+                  that.yposition -= 0.08;
+                  break;
+
+                case 83:
+                 // console.log(down arrow key pressed');
+                  //moving the object down
+                  that.yposition += 0.08;
+                  break;
+                }
+
+                 //not allowing the bal to move up the canvas 
+                if (that.yposition <=20){
+                  that.yposition = 20;
+                }
+
+                if (that.yposition >=500){
+                  that.yposition = 480;
+                }
+
+            });
         }
+
+        move2(){
+          var that = this;
+
+          //offsetting the canvas
+          var canvasPosition = {
+          x: canvas.offsetLeft,
+          y: canvas.offsetTop    
+          }
+
+          //moving the paddle with the moouse 
+          canvas.addEventListener("click", function(event) { 
+            //finding the local mouse position
+            var mouse = {
+            //  x: event.clientX- canvasPosition.x,
+            y: event.clientY - canvasPosition.y
+            }
+            //87 top 83 bottom
+            //  that.xposition = mouse.x - that.width / 2;
+            that.yposition = mouse.y
+
+            //not allowing the bal to move up the canvas 
+            if (that.yposition <=20){
+              that.yposition = 20;
+            }
+
+            if (that.yposition >=500){
+              that.yposition = 480;
+            }
+            console.log(canvasPosition.x + " " + canvasPosition.y);
+
+            //preventing the object from going out of the canvas 
+            that.yposition = Math.max(0, Math.min(that.yposition, canvas.height - that.radius));
+
+          });
+
+          //keypresses with jQuery
+          $(document.body).on('keydown', function(e) {
+              console.log(e.which);
+
+            // that.yposition = mouse.y - that.height / 2;
+              
+              switch (e.which) {
+                case 38:
+                // console.log(up arrow key pressed');
+                  //moving the object up
+                  that.yposition -= 0.08;
+                  break;
+
+                case 40:
+                // console.log(down arrow key pressed');
+                  //moving the object down
+                  that.yposition += 0.08;
+                  break;
+                }
+
+                //not allowing the bal to move up the canvas 
+                if (that.yposition <=20){
+                  that.yposition = 20;
+                }
+
+                if (that.yposition >=500){
+                  that.yposition = 480;
+                }
+
+            });
+        } 
    
        
     }
@@ -280,6 +387,7 @@
         ctx.font = "50px Arial";
         ctx.fillText("Collision detected", 100, 80);
 
+
       //set time function allows you to display something for a certain amount of time 
       setTimeout(function() {
         showCollisionText = false; 
@@ -287,6 +395,7 @@
 
     }
   }
+
 
     // A function to repeat every time the animation loops.
     function repeatme() {      
@@ -301,7 +410,7 @@
       paddle1.move();
 
       paddle2.draw();
-      paddle2.move();
+      paddle2.move2();
       collisionDetection();
 
       ctx.font = "20px Arial"; 
@@ -309,6 +418,7 @@
       ctx.fillText("Paddle 1 Score: " + paddle1Score,20,550); 
       ctx.fillText("Paddle 2 Score: " + paddle2Score,420,550); 
 
+ 
       //calling the method for the paddle class
       //p1.draw();
       //p2.draw();
