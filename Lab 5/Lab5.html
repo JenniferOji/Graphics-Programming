@@ -27,18 +27,21 @@
         document.body.appendChild(renderer.domElement);
 
         const geometry = new THREE.SphereGeometry( 20, 32, 16 ); 
-        const material = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: false } ); 
+        const material = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: true } ); 
         const sphere = new THREE.Mesh( geometry, material ); scene.add( sphere );
 
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(1, 0.5, 1);
-        scene.add(spotLight);
+        const light = new THREE.PointLight( 0xff0000, 1, 100 );
+        light.position.set( 50, 50, 50 );
+        scene.add( light );
         
         //callign repeate me loop to rotate the sphere 
         function repeatMe() {
             //Code to rotate sphere
             sphere.rotation.x += 0.01;
             sphere.rotation.y += 0.01;
+
+            //having the sphere rotate on different axis 
+            sphere.position.x += 0.01;
             renderer.render(scene,camera);
             requestAnimationFrame(repeatMe);
         }
