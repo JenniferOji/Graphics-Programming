@@ -16,10 +16,21 @@
 
         //Sphere object class 
         class Sphere{
-            constructor(radius,width,height){
+            constructor(radius,width,height,xposition,yposition,zposition,xvelocity,yvelocity){
+                //shape of sphere
                 this.radius = radius;
                 this.width = width;
                 this.height = height;
+                //location of sphere
+                this.xposition = xposition;
+                this.yposition = yposition;
+                this.zposition = zposition;
+                //this.sphere.position.set(xposition, yposition, zposition);
+
+                //movement of sphere
+                this.xvelocity = xvelocity;
+                this.yvelocity = yvelocity;
+
                 this.geometry = new THREE.SphereGeometry( this.radius, this.width, this.height ); 
                 this.material = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: true } ); 
                
@@ -30,6 +41,25 @@
                 this.sphere.receiveShadow = false; 
                 scene.add( this.sphere);
             }
+
+            // to make the sphere move 
+            move(){
+                this.yposition += this.yvelocity;
+                //this.xposition += this.xvelocity;
+
+                //reversing the ball if it reaching the end of the canvas 
+                if (this.yposition <= -20){
+                    this.yvelocity = this.yvelocity * -1;
+                }
+                //when the ball goes above the canvas it stops 
+                else if (this.yposition >= 10) {
+                   this.yvelocity = this.yvelocity * -1;
+                }
+
+                //updating the spheres position 
+                this.sphere.position.set(this.xposition, this.yposition, this.zposition);
+
+            }
         }
 
         // Implement scene - Create a Three.js scene to hold objects.
@@ -39,7 +69,7 @@
         var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
        
         // Set camera position
-        camera.position.z = 70;
+        camera.position.z = 60;
        
         // Implement renderer - Create a WebGL renderer for rendering the scene.
         var renderer = new THREE.WebGLRenderer();
@@ -61,7 +91,7 @@
         light.shadow.camera.near = 0.5; 
         light.shadow.camera.far = 500; 
 
-        const geometry = new THREE.PlaneGeometry( 70, 70 );
+        const geometry = new THREE.PlaneGeometry( 60, 60 );
         const material = new THREE.MeshLambertMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
         const plane = new THREE.Mesh( geometry, material );
         plane.receiveShadow = true;
@@ -70,7 +100,8 @@
         const helper = new THREE.CameraHelper( light.shadow.camera );
         scene.add( helper );
         //creating sphere object 
-        s1 = new Sphere(5,32,16);
+        //            rad,wid,high,x,y,z,xvel,yvel
+        s1 = new Sphere(5,32,16,  0,5,10,  1,0.5);
 
         //calling repeate me loop to rotate the sphere 
         function repeatMe() {
@@ -79,17 +110,18 @@
             s1.sphere.rotation.y += 0.01;
             s1.sphere.position.z = 50;
 
-                                 //x, y, z,
+            plane.rotation.x = -Math.PI / 2;
             s1.sphere.position.set(0, 5, 30);
 
-            plane.rotation.x = 300;
-            plane.position.set(0, -20, -10);
+            //                   x,  y,  z
+            plane.position.set(0, -20, -5);
 
+            s1.move();
 
             //having the sphere rotate on different axis 
             //s1.sphere.position.x += 0.01;
             renderer.render(scene,camera);
-            requestAnimationFrame(repeatMe);
+            window.requestAnimationFrame(repeatMe); 
         }
 
         repeatMe();
