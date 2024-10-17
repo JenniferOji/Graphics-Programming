@@ -31,6 +31,8 @@
                 this.yvelocity = yvelocity;
                 this.zvelocity = zvelocity;
 
+                this.gravity = 0.05;           
+
                 this.geometry = new THREE.SphereGeometry( this.radius, this.width, this.height ); 
                 this.material = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: false } ); 
                
@@ -45,16 +47,18 @@
             }
 
             // to make the sphere move 
-            move(){
+            move(){                
+                this.yvelocity-= this.gravity;
                 this.yposition += this.yvelocity;
+
                 this.xposition += this.xvelocity;
               //  this.zposition += this.zvelocity;
-                
+
                 //reversing the ball if it reaching the end of the canvas 
                 //-20 + spheres radius(5) 
                 //moving down 
                 if (this.yposition <= -15){
-                    this.yvelocity = this.yvelocity * -1;
+                    this.yvelocity = this.yvelocity * -0.8;
                 }
                 //when the ball goes above the canvas it stops 
                 //moving up
