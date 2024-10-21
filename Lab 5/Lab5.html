@@ -34,29 +34,43 @@
                 this.trajectory = 0.2;
                 this.gravity = 0.05;
 
+                //sphere geometry
+                this.geometry = new THREE.SphereGeometry(this.radius, this.width, this.height);
+                this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: false });
 
-                this.geometry = new THREE.SphereGeometry( this.radius, this.width, this.height ); 
-                this.material = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: false } ); 
-               
-                this.sphere = new THREE.Mesh( this.geometry, this.material ); 
-                //setting the spheres position after creating it 
-                //setting up the camera to cast shadow
-                //to cast a shadow make sure the variants are in line
+                //sphere mesh/material
+                this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; 
                 this.sphere.receiveShadow = false; 
-                scene.add( this.sphere);
-               }
+
+                //cretaing wireframe
+                const wireframeGeometry = new THREE.WireframeGeometry(this.geometry);
+                const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 }); // Wireframe color
+                this.wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+                
+                //setting initial position
+                this.sphere.position.set(this.xposition, this.yposition, this.zposition);
+                this.wireframe.position.set(this.xposition, this.yposition, this.zposition);
+                
+                //adding sphere and wireframe
+                scene.add(this.sphere);
+                scene.add(this.wireframe);
+            }
 
             //controlling the movement of the sphere 
             move(){
 
                 this.yvelocity-= this.gravity;
                 this.yposition += this.yvelocity;
-                 this.xposition += this.xvelocity + (this.trajectory);
-                //this.xposition += this.xvelocity;
+                this.xposition += this.xvelocity + (this.trajectory);
                 this.zposition += this.zvelocity;
 
-                 //rounding to float for the trajectory
+                //rotating the wireframe
+                this.wireframe.rotation.x += 0.01;
+                this.wireframe.rotation.y += 0.01;
+                this.wireframe.rotation.z += 0.01;
+
+                //rounding to float for the trajectory
                 this.xposition = parseFloat(this.xposition.toFixed(2));
                 this.yposition = parseFloat(this.yposition.toFixed(2));
                 this.zposition = parseFloat(this.zposition.toFixed(2));
@@ -92,18 +106,10 @@
                     this.zvelocity = this.zvelocity * -1;
                 }
 
-                /*
-                //when the ball bounces backward
-                if (this.zposition <= -25 ) {
-                  this.zvelocity = this.zvelocity * -1;
-                } 
-                //when the ball bounces forward 
-                else if (this.zposition >= 25 ) {
-                   this.zvelocity = this.zvelocity * -1;
-                }
-*/
                 //updating the spheres position 
                 this.sphere.position.set(this.xposition, this.yposition, this.zposition); 
+                this.wireframe.position.set(this.xposition, this.yposition, this.zposition); // Update wireframe position
+
             }
 
         }
@@ -222,18 +228,12 @@
 
         //callign repeate me loop to rotate the sphere 
         function repeatMe() {
-            //Code to rotate sphere
-            s1.sphere.rotation.x += 0.01;
-            s1.sphere.rotation.y += 0.01;
-           // s1.sphere.position.z = 50;
 
             s1.move();
             s2.move();
 
             collisionDetection();
 
-            //having the sphere rotate on different axis 
-            //s1.sphere.position.x += 0.01;
             renderer.render(scene,camera);
             window.requestAnimationFrame(repeatMe); 
 
