@@ -22,11 +22,33 @@
         //set up svg and size margins 
         var margin = { top: 50, right: 50, bootom: 50, left: 50 }
         width = 900 - margin.left - margin.right;
-        height = 670 - margin.top - margin.bootom;
+        height = 670 - margin.top - margin.bottom;
 
         //create x and y scales for interpolated value (x-axis)
+        var x = d3.scaleLinear()//draw line - map x, ycoords for each data point
+            .domain(d3.extent(data, function (d) {return d["years_before_2023"]; }))
+            .range([0, width]); //svg is down 
+
+        var y = d3.scaleLinear()//draw line - map x, ycoords for each data point
+            .domain(d3.extent(data, function (d) {return d["co2_ppmv"]; }))
+            .range([height, 0]); //svg is down 
+
+        //x is the d3d. scaletime()
+        var xAxis = d3.axisBottom(x)
+            .ticks(3);//the number of dashes on the line
+
+        var yAxis = d3.axisLeft(y)
+            .ticks(3);//the number of dashes on the line 
+
+        var valueline = d3.line()
+            .x(function(d){return x(d["years_before_2023"])})
+            .y(function(d){return y(d["co2_ppmv"])});
+            var svg = d3.select('body')
+        
+
     }
 
+   
 
  </script>
 
