@@ -44,6 +44,7 @@
         var valueline = d3.line() //draw line - map x, y coords for each data point 
             .x(function(d){return x(d["years_before_2023"])})
             .y(function(d){return y(d["co2_ppmv"])});
+            
         
         var svg = d3.select('body')
             .append("svg")
@@ -66,7 +67,10 @@
 
             //drawing the path 
             svg.append("path")
-                .attr("d", valueline(data));
+                .attr("d", valueline(data))
+                .attr("stroke", "red")//have to add stroke before you remove the line 
+                .attr("fill", "none");
+  
     }
 
    
