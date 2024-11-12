@@ -70,6 +70,14 @@
                 .attr("d", valueline(data))
                 .attr("stroke", "red")//have to add stroke before you remove the line 
                 .attr("fill", "none");
+
+            //adding text to the axis 
+            svg.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "end")
+            .attr("x", width - 330)
+            .attr("y", height + 40)
+            .text("years_before_2023");
   
     }
 
