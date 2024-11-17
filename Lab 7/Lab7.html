@@ -7,7 +7,13 @@
  <title>D3.js Demo</title>
  <h1>Jenny</h1>
  <meta charset="UTF-8">
- <style type="text/css"></style>
+ <style type="text/css">
+    body
+    {
+        font-size: 18px; 
+        font-family: Arial, sans-serif; 
+    }
+ </style>
  </head>
  <body>
  <script type="text/javascript">
@@ -59,10 +65,12 @@
             svg.append('g')//append a <g> - group element 
                 .attr('class', 'x axis')//specify classes 
                 .attr("transform", "translate(0," + height + ")")
+                .style("font-size", "14px") 
                 .call(xAxis);
 
             svg.append('g')
                 .attr('class', 'y axis')
+                .style("font-size", "12px") //increasing font size 
                 .call(yAxis);
 
             //drawing the path 
@@ -79,13 +87,23 @@
             .attr("y", height + 40)
             .text("years_before_2023");
 
-            /*svg.append("text")
-    .attr("class", "y label")
-    .attr("text-anchor", "end")
-    .attr("y", 6)
-    .attr("dy", ".75em")
-    .attr("transform", "rotate(-90)")
-    .text("life expectancy (years)");*/
+            svg.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "end")
+            .attr("y", -50)
+            .attr("x", -200)
+            .attr("dy", ".75em")
+            .attr("transform", "rotate(-90)")
+            .text("life expectancy (years)");
+
+            //chart label 
+            svg.append("text")
+            .attr("x", (width / 2))             
+            .attr("y", 0 - (margin.top / 2))
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px") 
+            .style("text-decoration", "underline")  
+            .text("CO2 Data");
   
     }
 
