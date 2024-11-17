@@ -31,15 +31,27 @@
         height = 670 - margin.top - margin.bottom;
 
         //create x and y scales for interpolated value (x-axis)
-        
+        //if plotting multiple lines you only need one xaxis
         var x = d3.scaleLinear()//draw line - map x, ycoords for each data point
             .domain(d3.extent(data, function (d) {return d["years_before_2023"]; }))
             .range([0, width]); //svg is down 
 
+        //for the line co2 
         var y = d3.scaleLinear()//draw line - map x, ycoords for each data point
             .domain(d3.extent(data, function (d) {return d["co2_ppmv"]; }))
             .range([height, 0]); //svg is down 
-        
+
+        //for the line tempanomoly 
+        var yTemp_Anomaly= d3.scaleLinear()
+            .domain(d3.extent(data, function (d) {return d["temp_anomaly"]; }))
+            .range([height, 0]);
+
+        //for methane 
+        var yMethane = d3.scaleLinear()
+            .domain(d3.extent(data, function (d) {return d["ch4_ppb"]; }))
+            .range([height, 0]);
+
+
         //axis
         var xAxis = d3.axisBottom(x)
             .ticks(3);//the number of dashes on the line
@@ -47,10 +59,21 @@
         var yAxis = d3.axisLeft(y)
             .ticks(3);//the number of dashes on the line 
 
+        //co2 line 
         var valueline = d3.line() //draw line - map x, y coords for each data point 
             .x(function(d){return x(d["years_before_2023"])})
             .y(function(d){return y(d["co2_ppmv"])});
-            
+
+        //temp anomaly line 
+        var valueline2 = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x(d["years_before_2023"])})
+            .y(function(d){return yTemp_Anomaly(d["temp_anomaly"])});
+
+        //methane line 
+        var valueline3 = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x(d["years_before_2023"])})
+            .y(function(d){return yMethane(d["ch4_ppb"])});
+                
         
         var svg = d3.select('body')
             .append("svg")
@@ -79,31 +102,46 @@
                 .attr("stroke", "red")//have to add stroke before you remove the line 
                 .attr("fill", "none");
 
+            //line for methane 
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line temp")
+                .attr("d", valueline2)
+                .attr("stroke", "blue")
+                .attr("fill", "none");
+
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line methane")
+                .attr("d", valueline3)
+                .attr("stroke", "green")
+                .attr("fill", "none");
+
             //adding text to the axis 
             svg.append("text")
-            .attr("class", "x label")
-            .attr("text-anchor", "end")
-            .attr("x", width - 330)
-            .attr("y", height + 40)
-            .text("years_before_2023");
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", width - 330)
+                .attr("y", height + 40)
+                .text("years_before_2023");
 
             svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "end")
-            .attr("y", -50)
-            .attr("x", -200)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)")
-            .text("life expectancy (years)");
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("y", -50)
+                .attr("x", -200)
+                .attr("dy", ".75em")
+                .attr("transform", "rotate(-90)")
+                .text("life expectancy (years)");
 
             //chart label 
             svg.append("text")
-            .attr("x", (width / 2))             
-            .attr("y", 0 - (margin.top / 2))
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px") 
-            .style("text-decoration", "underline")  
-            .text("CO2 Data");
+                .attr("x", (width / 2))             
+                .attr("y", 0 - (margin.top / 2))
+                .attr("text-anchor", "middle")  
+                .style("font-size", "16px") 
+                .style("text-decoration", "underline")  
+                .text("CO2 Data");
   
     }
 
