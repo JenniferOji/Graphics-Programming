@@ -5,13 +5,19 @@
 
  <head>
  <title>D3.js Demo</title>
- <h1>Jenny</h1>
+ <h1>Jenny  || - red line = co2   ||  - blue line = temp anomaly     - green line = methane </h1>
  <meta charset="UTF-8">
  <style type="text/css">
     body
     {
         font-size: 18px; 
         font-family: Arial, sans-serif; 
+    }
+
+    .zoom {
+        cursor: move;
+        fill: none;
+        pointer-events: all;
     }
  </style>
  </head>
@@ -26,20 +32,57 @@
 
     function plotC02Data(data){
         //set up svg and size margins 
-        var margin = { top: 50, right: 50, bottom: 50, left: 50 }
-        width = 900 - margin.left - margin.right;
-        height = 670 - margin.top - margin.bottom;
+        var svg = d3.select("svg"),
+
+        margin = { top: 50, right: 50, bottom: 50, left: 50 }
+        //margin for second graph 
+        margin2 = { top: 20, right: 50, bottom: 30, left: 50 }
+
+        //control width and height of entire graph
+        width = 1000 - margin.left - margin.right,
+        height = 450 - margin.top - margin.bottom,
+        height2 = 80; //height for second graph 
 
         //create x and y scales for interpolated value (x-axis)
-        
+        //if plotting multiple lines you only need one xaxis
         var x = d3.scaleLinear()//draw line - map x, ycoords for each data point
             .domain(d3.extent(data, function (d) {return d["years_before_2023"]; }))
-            .range([0, width]); //svg is down 
+            .range([0, width]); //svg is down //moving furhter to the right
 
+        //for the line co2 
         var y = d3.scaleLinear()//draw line - map x, ycoords for each data point
             .domain(d3.extent(data, function (d) {return d["co2_ppmv"]; }))
             .range([height, 0]); //svg is down 
-        
+
+
+        //for second graph
+        var x2 = d3.scaleLinear()//draw line - map x, ycoords for each data point
+            .domain(d3.extent(data, function (d) {return d["years_before_2023"]; }))
+            .range([0, width]); //svg is down //moving furhter to the right
+
+        var y2 = d3.scaleLinear()//draw line - map x, ycoords for each data point
+            .domain(d3.extent(data, function (d) {return d["co2_ppmv"]; }))
+            .range([height2, 0]); //svg is down 
+
+        var y2Temp = d3.scaleLinear()//draw line - map x, ycoords for each data point
+            .domain(d3.extent(data, function (d) {return d["temp_anomaly"]; }))
+            .range([height2, 0]); //svg is down 
+
+        var y2Methane = d3.scaleLinear()//draw line - map x, ycoords for each data point
+            .domain(d3.extent(data, function (d) {return d["ch4_ppb"]; }))
+            .range([height2, 0]); //svg is down 
+
+
+        //for the line tempanomoly 
+        var yTemp_Anomaly= d3.scaleLinear()
+            .domain(d3.extent(data, function (d) {return d["temp_anomaly"]; }))
+            .range([height, 0]);
+
+        //for methane 
+        var yMethane = d3.scaleLinear()
+            .domain(d3.extent(data, function (d) {return d["ch4_ppb"]; }))
+            .range([height, 0]);
+            
         //axis
         var xAxis = d3.axisBottom(x)
             .ticks(3);//the number of dashes on the line
@@ -47,27 +90,101 @@
         var yAxis = d3.axisLeft(y)
             .ticks(3);//the number of dashes on the line 
 
+        //for the second graph
+        var xAxis2 = d3.axisBottom(x2)//axis for the second graph 
+            .ticks(3);//the number of dashes on the line
+
+        var yAxis2 = d3.axisLeft(y2)
+            .ticks(3);//the number of dashes on the line 
+
+        
+        var brush = d3.brushX()
+            .extent([[0, 0], [width, height2]])
+            .on("brush end", brushed);
+
+        //the zooming feature on the second graph 
+        var zoom = d3.zoom()
+            .scaleExtent([1, Infinity])
+            .translateExtent([[0, 0], [width, height]])
+            .extent([[0, 0], [width, height]])
+            .on("zoom", zoomed);
+
+        //LINE GENERATORS
+        //co2 line 
         var valueline = d3.line() //draw line - map x, y coords for each data point 
             .x(function(d){return x(d["years_before_2023"])})
             .y(function(d){return y(d["co2_ppmv"])});
-            
+
+        //temp anomaly line 
+        var valueline2 = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x(d["years_before_2023"])})
+            .y(function(d){return yTemp_Anomaly(d["temp_anomaly"])});
+
+        //methane line 
+        var valueline3 = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x(d["years_before_2023"])})
+            .y(function(d){return yMethane(d["ch4_ppb"])});
+                 
+
+        //for the second graph
+        var valulineBottomGraph = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x2(d["years_before_2023"])})
+            .y(function(d){return y2(d["co2_ppmv"])});
+
+        var valulineBottomGraph2 = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x2(d["years_before_2023"])})
+            .y(function(d){return y2Temp(d["temp_anomaly"])});
+
+        var valulineBottomGraph3 = d3.line() //draw line - map x, y coords for each data point 
+            .x(function(d){return x2(d["years_before_2023"])})
+            .y(function(d){return y2Methane(d["ch4_ppb"])});
+
+
+        //for the zoom 
+        var clip = svg.append("defs").append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("x", 0)
+            .attr("y", 0); 
+
+
+        var Line_chart = svg.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("clip-path", "url(#clip)");
+
+
+        var focus = svg.append("g")
+            .attr("class", "focus")
+            .attr("d", valueline)
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         
+        var context = svg.append("g")
+            .attr("class", "context")
+            .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+
         var svg = d3.select('body')
             .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
 
+            //the graph outline 
+            //transform movees the entire graph 
+            //provides an offset so numeric values are visible 
             .append("g")
-                //provides an offset so numeric values are visible 
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("transform", "translate(" + (margin.left + 20  /*beacuse i moved the graph data by 50*/) + "," + margin.top + ")")
 
+      
             //adding the axis 
             svg.append('g')//append a <g> - group element 
                 .attr('class', 'x axis')//specify classes 
                 .attr("transform", "translate(0," + height + ")")
                 .style("font-size", "14px") 
                 .call(xAxis);
-
+                
             svg.append('g')
                 .attr('class', 'y axis')
                 .style("font-size", "12px") //increasing font size 
@@ -79,31 +196,131 @@
                 .attr("stroke", "red")//have to add stroke before you remove the line 
                 .attr("fill", "none");
 
-            //adding text to the axis 
-            svg.append("text")
-            .attr("class", "x label")
-            .attr("text-anchor", "end")
-            .attr("x", width - 330)
-            .attr("y", height + 40)
-            .text("years_before_2023");
+            //line for methane 
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line temp")
+                .attr("d", valueline2)
+                .attr("stroke", "blue")
+                .attr("fill", "none");
 
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line methane")
+                .attr("d", valueline3)
+                .attr("stroke", "green")
+                .attr("fill", "none");
+
+            //adding text to the axis 
+            //XAXIS
             svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "end")
-            .attr("y", -50)
-            .attr("x", -200)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)")
-            .text("life expectancy (years)");
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", width - 380)
+                .attr("y", height + 40)
+                .text("years_before_2023");
+
+            //YAXIS
+            svg.append("text")
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("y", -50)
+                .attr("x", -100)
+                .attr("dy", ".75em")
+                .attr("transform", "rotate(-90)")
+                .text("CO2 Levels");
 
             //chart label 
             svg.append("text")
-            .attr("x", (width / 2))             
-            .attr("y", 0 - (margin.top / 2))
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px") 
-            .style("text-decoration", "underline")  
-            .text("CO2 Data");
+                .attr("x", (width / 2))             
+                .attr("y", 0 - (margin.top / 2))
+                .attr("text-anchor", "middle")  
+                .style("font-size", "16px") 
+                .style("text-decoration", "underline")  
+                .text("CO2 Data");
+                
+        //for the second graph 
+        // Second graph container
+        var svg2 = d3.select('body')
+            .append("svg")
+            .attr("width", width + margin2.left + margin2.right)
+            .attr("height", height2 + margin2.top + margin2.bottom)
+            .append("g")
+            .attr("transform", "translate(" + (margin2.left + 20) + "," + margin2.top + ")");
+
+        
+            // Second graph elements
+            svg2.append("path")
+                .datum(data)
+                .attr("d", valulineBottomGraph)
+                .attr("stroke", "red")
+                .attr("fill", "none")
+
+            svg2.append("path")
+                .datum(data)
+                .attr("d", valulineBottomGraph2)
+                .attr("stroke", "blue")
+                .attr("fill", "none")
+
+            svg2.append("path")
+                .datum(data)
+                .attr("d", valulineBottomGraph3)
+                .attr("stroke", "green")
+                .attr("fill", "none")
+                
+            svg2.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height2 + ")")
+                .style("font-size", "14px")
+                .call(xAxis2);
+
+            svg2.append("g")
+                .attr("class", "y axis")
+                .style("font-size", "12px")
+                .call(yAxis2);
+
+            svg2.append("g")
+                .attr("class", "brush")
+                .call(brush)
+                .call(brush.move, x.range());
+
+            svg.append("rect")
+                .attr("class", "zoom")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .call(zoom);
+        
+
+        function brushed(event) {
+            if (event.sourceEvent && event.sourceEvent.type === "zoom") return;
+                const selection = event.selection || x2.range();
+                x.domain(selection.map(x2.invert, x2));
+                focus.selectAll(".line")
+                    .attr("d", function(d) {
+                        if (this.style.stroke === "red") return line1(data);
+                        if (this.style.stroke === "blue") return line2(data);
+                        return line3(data);
+                    });
+                focus.select(".axis--x").call(d3.axisBottom(x));
+                svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                    .scale(width / (selection[1] - selection[0]))
+                    .translate(-selection[0], 0));
+        }
+
+        function zoomed(event) {
+            if (event.sourceEvent && event.sourceEvent.type === "brush") return;
+                const t = event.transform;
+                x.domain(t.rescaleX(x2).domain());
+                focus.selectAll(".line")
+                    .attr("d", function(d) {
+                        if (this.style.stroke === "red") return line1(data);
+                        if (this.style.stroke === "blue") return line2(data);
+                        return line3(data);
+                    });
+                focus.select(".axis--x").call(d3.axisBottom(x));
+                context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+        }  
   
     }
 
