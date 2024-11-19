@@ -64,6 +64,7 @@
             .domain(d3.extent(data, function (d) {return d["co2_ppmv"]; }))
             .range([height2, 0]); //svg is down 
 
+<<<<<<< HEAD
         var y2Temp = d3.scaleLinear()//draw line - map x, ycoords for each data point
             .domain(d3.extent(data, function (d) {return d["temp_anomaly"]; }))
             .range([height2, 0]); //svg is down 
@@ -72,6 +73,8 @@
             .domain(d3.extent(data, function (d) {return d["ch4_ppb"]; }))
             .range([height2, 0]); //svg is down 
 
+=======
+>>>>>>> d9013088a967a5d3116822dd386eef9df84a24a4
 
         //for the line tempanomoly 
         var yTemp_Anomaly= d3.scaleLinear()
@@ -131,6 +134,7 @@
             .x(function(d){return x2(d["years_before_2023"])})
             .y(function(d){return y2(d["co2_ppmv"])});
 
+<<<<<<< HEAD
         var valulineBottomGraph2 = d3.line() //draw line - map x, y coords for each data point 
             .x(function(d){return x2(d["years_before_2023"])})
             .y(function(d){return y2Temp(d["temp_anomaly"])});
@@ -140,6 +144,8 @@
             .y(function(d){return y2Methane(d["ch4_ppb"])});
 
 
+=======
+>>>>>>> d9013088a967a5d3116822dd386eef9df84a24a4
         //for the zoom 
         var clip = svg.append("defs").append("svg:clipPath")
             .attr("id", "clip")
@@ -254,6 +260,7 @@
                 .datum(data)
                 .attr("d", valulineBottomGraph)
                 .attr("stroke", "red")
+<<<<<<< HEAD
                 .attr("fill", "none")
 
             svg2.append("path")
@@ -267,6 +274,9 @@
                 .attr("d", valulineBottomGraph3)
                 .attr("stroke", "green")
                 .attr("fill", "none")
+=======
+                .attr("fill", "none");
+>>>>>>> d9013088a967a5d3116822dd386eef9df84a24a4
                 
             svg2.append("g")
                 .attr("class", "x axis")
