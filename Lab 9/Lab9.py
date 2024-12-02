@@ -6,14 +6,12 @@ import copy
 #CNN EDGE DETECTION
 
 # img = cv2.imread('ATU.jpg',)
-img = cv2.imread('ATU1.jpg',)
-
+img = cv2.imread('opera.jpg',)
 # creating a copy of the orignal image so it doesnt affect the orignal 
 imgHarris = copy.deepcopy(img)
 
 # Convert the image to grayscale
 gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
-# creating a copy of the gray image so it doesnt affect the orignal 
 imgShiTomasi = copy.deepcopy(gray_image)
 orbImg = copy.deepcopy(gray_image)
 
@@ -33,7 +31,7 @@ plt.title('Gray Image'), plt.xticks([]), plt.yticks([])
 # 2 = block size 3 = apeture size
 dst = cv2.cornerHarris(gray_image, 2, 3, 0.04)
 
-threshold = 0.1; #number between 0 and 1
+threshold = 0.2; #number between 0 and 1
 for i in range(len(dst)):
     for j in range(len(dst[i])):
         if dst[i][j] > (threshold*dst.max()):
@@ -44,8 +42,8 @@ plt.title('Harris Corner Detection'), plt.xticks([]), plt.yticks([])
 
 # shi tomasi algorithm
 # how corners are detected 
-# 0.01 = quality level - 10 = min distance - 30 = max corners 
-corners = cv2.goodFeaturesToTrack(gray_image,150,0.01,10)
+# 0.01 = quality level - 10 = min distance - 200 = max corners 
+corners = cv2.goodFeaturesToTrack(gray_image,200,0.01,10)
 corners = np.int0(corners) #convert corners values to integer
 
 for i in corners:
